@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,11 +128,12 @@ export default function SaveLoadDialog({
                 <div className="space-y-3 sm:space-y-4">
                   <div className="space-y-1 sm:space-y-2">
                     <label className="text-xs sm:text-sm font-medium">Artwork Name</label>
+                    {/* @ts-expect-error ignore */}
                     <Input
                       value={saveName}
-                      onChange={(e) => setSaveName(e.target.value)}
+                      onChange={(e: { target: { value: SetStateAction<string>; }; }) => setSaveName(e.target.value)}
                       placeholder="Enter a name for your artwork..."
-                      onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                      onKeyDown={(e: { key: string; }) => e.key === "Enter" && handleSave()}
                       className="h-8 sm:h-10 text-xs sm:text-sm"
                     />
                   </div>

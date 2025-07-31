@@ -1,6 +1,5 @@
 import mime from 'mime-types';
-import { ArconnectSigner, ArweaveSigner, TurboFactory } from "@ardrive/turbo-sdk/web";
-import axios from 'axios';
+import { ArweaveSigner, TurboFactory } from "@ardrive/turbo-sdk/web";
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { jwk } from './arkit';

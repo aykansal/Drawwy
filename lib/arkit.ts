@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Arweave from 'arweave';
-import { toast } from 'sonner';
 import type { JWKInterface } from 'arweave/node/lib/wallet';
 
 // config constants

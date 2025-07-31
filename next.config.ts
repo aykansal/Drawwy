@@ -3,6 +3,7 @@ import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  output:"export",
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

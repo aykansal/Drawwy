@@ -154,17 +154,18 @@ export default function HeroGeometric({
                 <div className="max-w-3xl mx-auto text-center">
                     <motion.div
                         custom={0}
+                        //@ts-expect-error ignore
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
                         className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
-                    >
+                        >
                         <Image
                             src="https://ui.codesnipet.dev/logo.svg"
                             alt="ardacity UI"
                             width={20}
                             height={20}
-                        />
+                            />
                         <span className="text-sm text-white/60 tracking-wide">
                             {badge}
                         </span>
@@ -172,10 +173,11 @@ export default function HeroGeometric({
 
                     <motion.div
                         custom={1}
+                        //@ts-expect-error ignore
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
-                    >
+                        >
                         <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
                             <span className="bg-clip-text text-transparent bg-linear-to-b from-white to-white/80">
                                 {title1}
@@ -194,6 +196,7 @@ export default function HeroGeometric({
 
                     <motion.div
                         custom={2}
+                        //@ts-expect-error ignore
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
