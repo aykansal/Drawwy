@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playwrite_AU_QLD, Nunito } from "next/font/google";
+import { Geist, Geist_Mono, Playwrite_AU_QLD } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
@@ -14,11 +14,6 @@ const geistMono = Geist_Mono({
 });
 const playwrite = Playwrite_AU_QLD({
   variable: "--font-playwrite-au-qld",
-});
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
