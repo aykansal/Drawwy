@@ -48,54 +48,55 @@ export default function PixelToolbar({
   const gridSizes: { value: GridSize; label: string }[] = [
     { value: 8, label: "8×8" },
     { value: 16, label: "16×16" },
+    { value: 32, label: "32×32" },
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl lg:max-w-none mx-auto">
       <motion.div
-        className="flex flex-col gap-3 p-4 bg-background border rounded-xl shadow-sm"
+        className="flex flex-col gap-2 sm:gap-3 p-2 sm:p-3 lg:p-4 bg-background border rounded-xl shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
         {/* Top Row - Drawing Tools and History */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           {/* Drawing Tools */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-2">
             <Button
               variant={isErasing ? "default" : "outline"}
               size="sm"
               onClick={onToggleEraser}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3"
             >
-              <Eraser className="w-4 h-4" />
-              <span className="hidden sm:inline">Eraser</span>
+              <Eraser className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Eraser</span>
             </Button>
 
-            <div className="w-px h-6 bg-border" />
+            <div className="w-px h-4 sm:h-6 bg-border" />
 
             <Button
               variant={showGridLines ? "default" : "outline"}
               size="sm"
               onClick={onToggleGridLines}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3"
             >
-              <Grid3X3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Grid</span>
+              <Grid3X3 className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Grid</span>
             </Button>
           </div>
 
           {/* History Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-end gap-1 sm:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={onUndo}
               disabled={!canUndo}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3"
             >
-              <Undo2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Undo</span>
+              <Undo2 className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Undo</span>
             </Button>
 
             <Button
@@ -103,18 +104,18 @@ export default function PixelToolbar({
               size="sm"
               onClick={onRedo}
               disabled={!canRedo}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3"
             >
-              <Redo2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Redo</span>
+              <Redo2 className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Redo</span>
             </Button>
           </div>
         </div>
 
         {/* Bottom Row - Grid Size and Actions */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           {/* Grid Size Selector */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-2">
             <span className="text-xs text-muted-foreground hidden sm:inline">
               Size:
             </span>
@@ -125,7 +126,7 @@ export default function PixelToolbar({
                   variant={currentSize === size.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => onSizeChange(size.value)}
-                  className="text-xs px-2"
+                  className="text-xs px-1 sm:px-2 h-7 sm:h-8"
                 >
                   {size.label}
                 </Button>
@@ -134,15 +135,15 @@ export default function PixelToolbar({
           </div>
 
           {/* Reset Button */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-end gap-1 sm:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={onReset}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3"
             >
-              <RotateCcw className="w-4 h-4" />
-              <span className="hidden sm:inline">Reset</span>
+              <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline text-xs sm:text-sm">Reset</span>
             </Button>
           </div>
         </div>

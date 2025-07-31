@@ -27,7 +27,7 @@ export const APM_INSTALLER =
 export const CommonTags: Tag[] = [
     {
         name: "Name",
-        value: "Pixel Art Creator"
+        value: "Drawwy"
     },
     { name: "Version", value: "2.0.0" },
     { name: "Authority", value: "fcoN_xJeisVsPXA-trzVAuIiqO3ydLQxM-L4XbrQKzY" },

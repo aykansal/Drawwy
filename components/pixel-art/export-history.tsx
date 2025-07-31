@@ -68,64 +68,64 @@ export default function ExportHistoryDialog({
         onClick={onClose}
       >
         <motion.div
-          className="w-full max-w-2xl max-h-[80vh] overflow-hidden"
+          className="w-full max-w-sm sm:max-w-lg lg:max-w-2xl max-h-[70vh] sm:max-h-[80vh] overflow-hidden p-2 sm:p-4"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
         >
           <Card className="h-full flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                <History className="w-5 h-5" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                <History className="w-4 h-4 sm:w-5 sm:h-5" />
                 Export History
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </CardHeader>
 
             <CardContent className="flex-1 overflow-hidden">
               {exportHistory.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No exports yet</p>
-                  <p className="text-sm">
+                <div className="text-center py-8 sm:py-12 text-muted-foreground">
+                  <History className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 opacity-50" />
+                  <p className="text-sm sm:text-base">No exports yet</p>
+                  <p className="text-xs sm:text-sm">
                     Upload your first artwork to see it here!
                   </p>
                 </div>
               ) : (
-                <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                <div className="space-y-2 sm:space-y-3 max-h-64 sm:max-h-96 overflow-y-auto pr-1 sm:pr-2">
                   {exportHistory.map((item) => (
                     <motion.div
                       key={item.id}
-                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                      className="flex items-center justify-between p-2 sm:p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
-                          <FileImage className="w-4 h-4" />
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-muted rounded flex items-center justify-center">
+                          <FileImage className="w-3 h-3 sm:w-4 sm:h-4" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">
+                          <p className="font-medium truncate text-xs sm:text-sm">
                             {item.artworkName}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">
-                              <User className="w-3 h-3" />
+                              <User className="w-2 h-2 sm:w-3 sm:h-3" />
                               {item.creatorName}
                             </span>
                             <span>
                               {item.size}×{item.size}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
+                              <Calendar className="w-2 h-2 sm:w-3 sm:h-3" />
                               {formatDate(item.exportedAt)}
                             </span>
                           </div>
@@ -139,21 +139,21 @@ export default function ExportHistoryDialog({
                           onClick={() =>
                             handleCopyLink(item.turboLink, item.id)
                           }
-                          className="h-8 w-8 p-0"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                         >
                           {copiedId === item.id ? (
-                            <Check className="w-3 h-3 text-green-600" />
+                            <Check className="w-2 h-2 sm:w-3 sm:h-3 text-green-600" />
                           ) : (
-                            <Copy className="w-3 h-3" />
+                            <Copy className="w-2 h-2 sm:w-3 sm:h-3" />
                           )}
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => window.open(item.turboLink, "_blank")}
-                          className="h-8 w-8 p-0"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                         >
-                          <ExternalLink className="w-3 h-3" />
+                          <ExternalLink className="w-2 h-2 sm:w-3 sm:h-3" />
                         </Button>
                       </div>
                     </motion.div>

@@ -61,34 +61,34 @@ export default function ExportDialog({
         onClick={onClose}
       >
         <motion.div
-          className="w-full max-w-md"
+          className="w-full max-w-sm sm:max-w-md p-2 sm:p-4"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
         >
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                <Upload className="w-5 h-5" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
                 Upload to Arweave
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 disabled={isUploading}
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </CardHeader>
             
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <User className="w-4 h-4" />
+            <CardContent className="space-y-3 sm:space-y-4">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                    <User className="w-3 h-3 sm:w-4 sm:h-4" />
                     Artist Name
                   </label>
                   <Input
@@ -97,12 +97,13 @@ export default function ExportDialog({
                     placeholder="Enter your name..."
                     disabled={isUploading}
                     onKeyDown={(e) => e.key === "Enter" && handleExport()}
+                    className="h-8 sm:h-10 text-xs sm:text-sm"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <FileImage className="w-4 h-4" />
+                <div className="space-y-1 sm:space-y-2">
+                  <label className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                    <FileImage className="w-3 h-3 sm:w-4 sm:h-4" />
                     Artwork Name
                   </label>
                   <Input
@@ -111,16 +112,17 @@ export default function ExportDialog({
                     placeholder="Enter artwork name..."
                     disabled={isUploading}
                     onKeyDown={(e) => e.key === "Enter" && handleExport()}
+                    className="h-8 sm:h-10 text-xs sm:text-sm"
                   />
                 </div>
               </div>
               
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <FileImage className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                <FileImage className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Size: {currentSize}×{currentSize}</span>
               </div>
               
-              <div className="text-xs text-muted-foreground bg-muted p-3 rounded-lg">
+              <div className="text-xs text-muted-foreground bg-muted p-2 sm:p-3 rounded-lg">
                 <p>Your artwork will be uploaded to Arweave and stored permanently on the blockchain.</p>
                 <p className="mt-1">You'll receive a link that you can share with others.</p>
               </div>
@@ -128,16 +130,16 @@ export default function ExportDialog({
               <Button
                 onClick={handleExport}
                 disabled={!creatorName.trim() || !artworkName.trim() || isUploading}
-                className="w-full"
+                className="w-full h-8 sm:h-10 text-xs sm:text-sm"
               >
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 animate-spin" />
                     Uploading...
                   </>
                 ) : (
                   <>
-                    <Upload className="w-4 h-4 mr-2" />
+                    <Upload className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                     Upload to Arweave
                   </>
                 )}

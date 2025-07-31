@@ -171,7 +171,7 @@ export default function PixelArtApp() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
       {/* Floating Action Bar - Top Right */}
       <motion.div
-        className="fixed top-4 right-4 z-50 flex items-center gap-2"
+        className="fixed top-2 right-2 sm:top-4 sm:right-4 z-50 flex items-center gap-1 sm:gap-2"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
@@ -180,73 +180,75 @@ export default function PixelArtApp() {
           variant="outline"
           size="sm"
           onClick={() => setShowHistoryDialog(true)}
-          className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg"
+          className="flex items-center gap-1 sm:gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
-          <History className="w-4 h-4" />
-          <span className="hidden sm:inline">History</span>
+          <History className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden md:inline text-xs sm:text-sm">History</span>
         </Button>
         
         <Button
           variant="outline"
           size="sm"
           onClick={() => setShowSaveDialog(true)}
-          className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg"
+          className="flex items-center gap-1 sm:gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
-          <Save className="w-4 h-4" />
-          <span className="hidden sm:inline">Save</span>
+          <Save className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden md:inline text-xs sm:text-sm">Save</span>
         </Button>
         
         <Button
           variant="default"
           size="sm"
           onClick={() => setShowExportDialog(true)}
-          className="flex items-center gap-2 bg-primary/90 backdrop-blur-sm shadow-lg"
+          className="flex items-center gap-1 sm:gap-2 bg-primary/90 backdrop-blur-sm shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
-          <Download className="w-4 h-4" />
-          <span className="hidden sm:inline">Upload</span>
+          <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden md:inline text-xs sm:text-sm">Upload</span>
         </Button>
       </motion.div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <motion.div
-          className="text-center mb-8"
+          className="text-center mb-4 sm:mb-6 lg:mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <HandWrittenTitle
-            title="Pixel Art Creator"
-            subtitle="Create beautiful pixel art with ease"
+            title="Drawwy"
+            subtitle=""
           />
         </motion.div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
           {/* Left Sidebar - Color Palette */}
           <motion.div
-            className="lg:col-span-1"
+            className="lg:col-span-1 order-2 lg:order-1"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             {/* Toolbar */}
-            <PixelToolbar
-              onUndo={handleUndo}
-              onRedo={handleRedo}
-              onSave={() => {}} // Empty function since buttons moved to top
-              onExport={() => {}} // Empty function since buttons moved to top
-              onReset={handleReset}
-              onToggleGridLines={handleToggleGridLines}
-              onToggleEraser={handleToggleEraser}
-              onSizeChange={handleSizeChange}
-              canUndo={canUndo(history)}
-              canRedo={canRedo(history)}
-              showGridLines={showGridLines}
-              isErasing={isErasing}
-              currentSize={gridSize}
-              selectedColor={selectedColor}
-            />
+            <div className="mb-4 sm:mb-6">
+              <PixelToolbar
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                onSave={() => {}} // Empty function since buttons moved to top
+                onExport={() => {}} // Empty function since buttons moved to top
+                onReset={handleReset}
+                onToggleGridLines={handleToggleGridLines}
+                onToggleEraser={handleToggleEraser}
+                onSizeChange={handleSizeChange}
+                canUndo={canUndo(history)}
+                canRedo={canRedo(history)}
+                showGridLines={showGridLines}
+                isErasing={isErasing}
+                currentSize={gridSize}
+                selectedColor={selectedColor}
+              />
+            </div>
             <ColorPalette
               selectedColor={selectedColor}
               onColorSelect={setSelectedColor}
@@ -257,12 +259,12 @@ export default function PixelArtApp() {
 
           {/* Center - Pixel Grid */}
           <motion.div
-            className="lg:col-span-2"
+            className="lg:col-span-2 order-1 lg:order-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Pixel Grid */}
               <PixelGrid
                 grid={grid}

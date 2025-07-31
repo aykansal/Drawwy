@@ -43,6 +43,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@theme{
+  --font-playwrite-au-qld: "Playwrite AU QLD", sans-serif; 
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -115,7 +119,10 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+
+    @apply font-nunito;
   }
+
   body {
     @apply bg-background text-foreground;
   }

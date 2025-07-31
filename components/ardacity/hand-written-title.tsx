@@ -45,6 +45,7 @@ export default function HandWrittenTitle({
                         stroke="currentColor"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        //@ts-expect-error ignore
                         variants={draw}
                         className="text-black dark:text-white opacity-90"
                     />
@@ -52,7 +53,7 @@ export default function HandWrittenTitle({
             </div>
             <div className="relative text-center z-10 flex flex-col items-center justify-center">
                 <motion.h1
-                    className="text-4xl md:text-6xl text-black dark:text-white tracking-tighter flex items-center gap-2"
+                    className="text-4xl md:text-6xl text-black dark:text-white tracking-tighter flex items-center gap-2 font-playwrite-au-qld"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.8 }}

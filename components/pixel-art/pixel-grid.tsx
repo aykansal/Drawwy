@@ -48,14 +48,19 @@ export default function PixelGrid({
     setIsErasing(false);
   }, []);
 
-  const pixelSize = Math.min(400 / size, 20); // Responsive pixel size
+  const pixelSize = Math.min(
+    typeof window !== 'undefined' 
+      ? Math.min(window.innerWidth * 0.8, window.innerHeight * 0.6) / size 
+      : 400 / size, 
+    20
+  ); // Responsive pixel size based on viewport
   const gridSize = size * pixelSize;
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium text-sm">Pixel Grid ({size}x{size})</h3>
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <h3 className="font-medium text-sm sm:text-base">Pixel Grid ({size}x{size})</h3>
           <div className="text-xs text-muted-foreground">
             {pixelSize.toFixed(1)}px per pixel
           </div>
@@ -74,6 +79,8 @@ export default function PixelGrid({
               display: 'grid',
               gridTemplateColumns: `repeat(${size}, ${pixelSize}px)`,
               gridTemplateRows: `repeat(${size}, ${pixelSize}px)`,
+              maxWidth: '100%',
+              maxHeight: '60vh',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -109,7 +116,7 @@ export default function PixelGrid({
         </div>
 
         {/* Drawing Instructions */}
-        <div className="mt-4 text-center">
+        <div className="mt-3 sm:mt-4 text-center">
           <p className="text-xs text-muted-foreground">
             Click to draw • Drag to paint • Current: {selectedColor}
           </p>

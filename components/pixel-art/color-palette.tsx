@@ -36,41 +36,41 @@ export default function ColorPalette({
 
   return (
     <Card className="w-full max-w-md mx-auto">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-4">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
           <Palette className="w-4 h-4 text-primary" />
-          <h3 className="font-medium text-sm">Color Palette</h3>
+          <h3 className="font-medium text-sm sm:text-base">Color Palette</h3>
         </div>
 
         {/* Selected Color Display */}
         <motion.div
-          className="mb-4 p-3 rounded-lg border-2 border-dashed border-muted-foreground/20"
+          className="mb-3 sm:mb-4 p-2 sm:p-3 rounded-lg border-2 border-dashed border-muted-foreground/20"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <motion.div
-              className="w-8 h-8 rounded-lg border-2 border-border shadow-sm"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-2 border-border shadow-sm"
               style={{ backgroundColor: selectedColor }}
               layoutId="selectedColor"
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
             />
             <div className="flex-1">
               <p className="text-xs text-muted-foreground">Current Color</p>
-              <p className="text-sm font-mono">{selectedColor}</p>
+              <p className="text-xs sm:text-sm font-mono">{selectedColor}</p>
             </div>
           </div>
         </motion.div>
 
         {/* Color Grid */}
-        <div className="grid grid-cols-8 gap-2 mb-4">
+        <div className="grid grid-cols-8 gap-1 sm:gap-2 mb-3 sm:mb-4">
           {allColors.map((color, index) => (
             <motion.button
               key={`${color}-${index}`}
               onClick={() => onColorSelect(color)}
               className={cn(
-                "w-8 h-8 rounded-lg border-2 transition-all duration-200",
+                "w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-2 transition-all duration-200",
                 "hover:scale-110 hover:shadow-md",
                 selectedColor === color
                   ? "border-primary ring-2 ring-primary/20"
@@ -88,14 +88,14 @@ export default function ColorPalette({
         </div>
 
         {/* Custom Color Picker */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowColorPicker(!showColorPicker)}
-            className="w-full"
+            className="w-full h-8 sm:h-9 text-xs sm:text-sm"
           >
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             Add Custom Color
           </Button>
 
@@ -104,27 +104,27 @@ export default function ColorPalette({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="space-y-3"
+              className="space-y-2 sm:space-y-3"
             >
               <div className="flex items-center gap-2">
                 <input
                   type="color"
                   value={customColor}
                   onChange={(e) => setCustomColor(e.target.value)}
-                  className="w-12 h-8 rounded border border-border cursor-pointer"
+                  className="w-10 h-8 sm:w-12 sm:h-8 rounded border border-border cursor-pointer"
                 />
                 <input
                   type="text"
                   value={customColor}
                   onChange={(e) => setCustomColor(e.target.value)}
-                  className="flex-1 px-3 py-1 text-sm border border-border rounded-md font-mono"
+                  className="flex-1 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm border border-border rounded-md font-mono"
                   placeholder="#000000"
                 />
               </div>
               <Button
                 size="sm"
                 onClick={handleCustomColorAdd}
-                className="w-full"
+                className="w-full h-8 sm:h-9 text-xs sm:text-sm"
               >
                 Add to Palette
               </Button>

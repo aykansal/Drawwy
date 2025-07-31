@@ -99,7 +99,7 @@ export const uploadToTurbo = async (file: File, isManifest = false, creator: str
                     { name: 'Version', value: '1.0.0' },
                     { name: 'Artist', value: creator },
                     { name: 'Content-Type', value: contentType },
-                    { name: 'App-Name', value: 'Pixel Art Creator' },
+                    { name: 'App-Name', value: 'Drawwy' },
                     ...(isManifest ? [{ name: 'Type', value: 'manifest' }] : [])
                 ]
             }
