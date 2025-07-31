@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ardrive/turbo-sdk": "^1.25.0",
+    "@next/third-parties": "^15.4.5",
     "@permaweb/aoconnect": "^0.0.85",
     "@radix-ui/react-slot": "^1.2.3",
     "@types/mime-types": "^3.0.1",

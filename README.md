@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drawwy
 
-## Getting Started
+Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends! Your artwork is permanently stored on Arweave and can be shared with anyone using a simple link.
 
-First, run the development server:
+![Drawwy App](public/image.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Live Demo
+Check it out: [drawwy_arlink.ar.io](https://drawwy_arlink.ar.io/?utm_source=github)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What it does
+- Draw pixel art on different grid sizes (8x8, 16x16, 32x32)
+- Choose from lots of colors or add your own
+- Undo and redo your changes
+- Export your creations
+- Permanently store your artwork on Arweave - your creations are saved forever
+- It can be shared with anyone via a simple link!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Perfect for making simple pixel art, icons, or just having fun drawing!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stats for Nerds
+- Next.js
+- Ardacity UI
+- Ardrive Turbo SDK
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Author
+crafted with ❤️ by [aykansal](https://x.com/aykansal)
