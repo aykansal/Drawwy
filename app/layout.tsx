@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playwrite_AU_QLD } from "next/font/google";
+import { Geist, Geist_Mono, Playwrite_AU_QLD, Nunito } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
@@ -16,31 +16,10 @@ const playwrite = Playwrite_AU_QLD({
   variable: "--font-playwrite-au-qld",
 });
 
-export const metadata: Metadata = {
-  title: "Drawwy",
-  description:
-    "Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends.",
-  authors: [{ name: "Aykansal", url: "https://x.com/aykansal" }],
-  creator: "Aykansal",
-  publisher: "Aykansal",
-  openGraph: {
-    title: "Drawwy",
-    description:
-      "Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends.",
-  },
-  category: "art",
-  robots: {
-    index: true,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Drawwy",
-    description:
-      "Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends.",
-    images: [""],
-  },
-  metadataBase: new URL("https://x.com/aykansal"),
-};
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
@@ -50,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playwrite.variable} ${nunito.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playwrite.variable} ${nunito.variable} font-nunito antialiased`}
       >
         {children}
         <footer className="mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
