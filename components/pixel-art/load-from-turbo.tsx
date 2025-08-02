@@ -8,6 +8,7 @@ import { Loader2, Download, AlertCircle } from "lucide-react";
 import { loadGridFromTurboLink, stringToGrid } from "@/lib/pixel-art-utils";
 
 interface LoadFromTurboProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onGridLoaded: (grid: string[][], metadata: any) => void;
 }
 

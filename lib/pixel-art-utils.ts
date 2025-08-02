@@ -6,6 +6,8 @@ export function createEmptyGrid(size: GridSize): string[][] {
   return Array(size).fill(null).map(() => Array(size).fill('#ffffff'));
 }
 
+type Tag = { name: string, value: string }
+
 // Create a deep copy of a grid
 export function cloneGrid(grid: string[][]): string[][] {
   return grid.map(row => [...row]);
@@ -25,7 +27,7 @@ export function addToHistory(history: HistoryState, newGrid: string[][], maxHist
   if (newPast.length > maxHistory) {
     newPast.shift();
   }
-  
+
   return {
     past: newPast,
     present: cloneGrid(newGrid),
@@ -35,10 +37,10 @@ export function addToHistory(history: HistoryState, newGrid: string[][], maxHist
 
 export function undo(history: HistoryState): HistoryState | null {
   if (!canUndo(history)) return null;
-  
+
   const previous = history.past[history.past.length - 1];
   const newPast = history.past.slice(0, -1);
-  
+
   return {
     past: newPast,
     present: previous,
@@ -48,10 +50,10 @@ export function undo(history: HistoryState): HistoryState | null {
 
 export function redo(history: HistoryState): HistoryState | null {
   if (!canRedo(history)) return null;
-  
+
   const next = history.future[0];
   const newFuture = history.future.slice(1);
-  
+
   return {
     past: [...history.past, history.present],
     present: next,
@@ -64,13 +66,13 @@ export function savePixelArt(art: PixelArt): void {
   try {
     const savedArts = getSavedPixelArts();
     const existingIndex = savedArts.findIndex(a => a.id === art.id);
-    
+
     if (existingIndex >= 0) {
       savedArts[existingIndex] = { ...art, updatedAt: Date.now() };
     } else {
       savedArts.push({ ...art, createdAt: Date.now(), updatedAt: Date.now() });
     }
-    
+
     localStorage.setItem('pixel-arts', JSON.stringify(savedArts));
     console.log('Pixel art saved successfully:', art.name);
   } catch (error) {
@@ -140,8 +142,8 @@ export function stringToGrid(gridString: string): string[][] {
 
 // Turbo upload utilities
 export async function uploadToTurboWithHistory(
-  grid: string[][], 
-  creatorName: string, 
+  grid: string[][],
+  creatorName: string,
   artworkName: string
 ): Promise<ExportHistory> {
   try {
@@ -149,18 +151,18 @@ export async function uploadToTurboWithHistory(
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Canvas context not available');
-    
+
     const size = grid.length;
     const scale = 8;
     const canvasSize = size * scale;
-    
+
     canvas.width = canvasSize;
     canvas.height = canvasSize;
-    
+
     // Fill background
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvasSize, canvasSize);
-    
+
     // Draw pixels
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
@@ -171,7 +173,7 @@ export async function uploadToTurboWithHistory(
         }
       }
     }
-    
+
     // Convert canvas to blob
     const blob = await new Promise<Blob>((resolve) => {
       canvas.toBlob((blob) => {
@@ -179,20 +181,20 @@ export async function uploadToTurboWithHistory(
         else throw new Error('Failed to create blob');
       }, 'image/png');
     });
-    
+
     // Create file from blob
     const file = new File([blob], `${artworkName}.png`, { type: 'image/png' });
-    
+
     // Convert grid to string for storage in tags
     const gridDataString = gridToString(grid);
-    
+
     // Upload to Turbo with grid data
     const turboId = await uploadToTurbo(file, false, creatorName, gridDataString);
-    
+
     if (!turboId) {
       throw new Error('Failed to upload to Turbo');
     }
-    
+
     // Create export history entry
     const exportHistory: ExportHistory = {
       id: generateId(),
@@ -202,10 +204,10 @@ export async function uploadToTurboWithHistory(
       size,
       exportedAt: Date.now()
     };
-    
+
     // Save to localStorage
     saveExportHistory(exportHistory);
-    
+
     return exportHistory;
   } catch (error) {
     console.error('Error uploading to Turbo:', error);
@@ -223,39 +225,40 @@ export function extractTurboId(turboLink: string): string {
 }
 
 // Load grid data from Turbo transaction
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string[][], metadata: any }> {
   try {
     console.log('Loading grid data from Turbo transaction:', turboId);
-    
+
     // Fetch transaction data from Arweave
     const response = await fetch(`https://arweave.net/${turboId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch transaction: ${response.statusText}`);
     }
-    
+
     // Get the transaction data
     const transactionData = await response.json();
-    
+
     // Extract tags from the transaction
     const tags = transactionData.tags || [];
-    
+
     // Find the Art-Grid-Data tag
-    const gridDataTag = tags.find((tag: any) => tag.name === 'Art-Grid-Data');
+    const gridDataTag = tags.find((tag: Tag) => tag.name === 'Art-Grid-Data');
     if (!gridDataTag) {
       throw new Error('No grid data found in transaction tags');
     }
-    
+
     // Parse the grid data
     const grid = stringToGrid(gridDataTag.value);
-    
+
     // Extract other metadata from tags
     const metadata = {
-      artist: tags.find((tag: any) => tag.name === 'Artist')?.value,
-      artName: tags.find((tag: any) => tag.name === 'Art-Name')?.value,
-      createdAt: tags.find((tag: any) => tag.name === 'Created-At')?.value,
-      contentType: tags.find((tag: any) => tag.name === 'Content-Type')?.value,
+      artist: tags.find((tag: Tag) => tag.name === 'Artist')?.value,
+      artName: tags.find((tag: Tag) => tag.name === 'Art-Name')?.value,
+      createdAt: tags.find((tag: Tag) => tag.name === 'Created-At')?.value,
+      contentType: tags.find((tag: Tag) => tag.name === 'Content-Type')?.value,
     };
-    
+
     console.log('Successfully loaded grid data from Turbo transaction');
     return { grid, metadata };
   } catch (error) {
@@ -265,6 +268,7 @@ export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string
 }
 
 // Load grid data from Turbo link (convenience function)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadGridFromTurboLink(turboLink: string): Promise<{ grid: string[][], metadata: any }> {
   const turboId = extractTurboId(turboLink);
   return loadGridFromTurbo(turboId);
@@ -275,18 +279,18 @@ export function exportToPNG(grid: string[][], options: ExportOptions = { format:
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas context not available');
-  
+
   const size = grid.length;
   const scale = options.scale || 4;
   const canvasSize = size * scale;
-  
+
   canvas.width = canvasSize;
   canvas.height = canvasSize;
-  
+
   // Fill background
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, canvasSize, canvasSize);
-  
+
   // Draw pixels
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -297,7 +301,7 @@ export function exportToPNG(grid: string[][], options: ExportOptions = { format:
       }
     }
   }
-  
+
   return canvas.toDataURL('image/png');
 }
 
@@ -308,7 +312,7 @@ export function exportToJSON(grid: string[][], name: string): string {
     size: grid.length,
     exportedAt: new Date().toISOString()
   };
-  
+
   return JSON.stringify(data, null, 2);
 }
 
