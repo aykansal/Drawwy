@@ -2,8 +2,11 @@ import type { NextConfig } from "next";
 import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
+  images: {
+    unoptimized: true
+  },
   reactStrictMode: false,
-  output:"export",
+  output: "export",
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

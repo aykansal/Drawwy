@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ar.io/sdk": "^3.15.1",
     "@ardrive/turbo-sdk": "^1.25.0",
     "@next/third-parties": "^15.4.5",
     "@permaweb/aoconnect": "^0.0.85",
+    "@permaweb/libs": "^0.0.45",
     "@radix-ui/react-slot": "^1.2.3",
     "@types/mime-types": "^3.0.1",
     "arweave": "^1.15.7",
@@ -24,6 +26,7 @@
     "next": "15.4.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-tweet": "^3.2.2",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1"
   },
