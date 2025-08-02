@@ -1,6 +1,5 @@
 import mime from 'mime-types';
 import { ArweaveSigner, TurboFactory } from "@ardrive/turbo-sdk/web";
-import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { jwk } from './arkit';
 
@@ -41,14 +40,6 @@ export class InsufficientBalanceError extends Error {
 
 const FREE_UPLOAD_SIZE = 100 * 1024 // 100KB in bytes
 
-// Initialize authenticated client with Wander
-
-const arweave = Arweave.init({
-    host: "arweave.net",
-    port: 443,
-    protocol: "https"
-})
-
 const signer = new ArweaveSigner(jwk as JWKInterface);
 
 // const signer = new ArconnectSigner(window.arweaveWallet);
@@ -65,7 +56,7 @@ function fileToUint8Array(file: File): Promise<Uint8Array> {
     });
 }
 
-export const uploadToTurbo = async (file: File, isManifest = false, creator: string) => {
+export const uploadToTurbo = async (file: File, isManifest = false, creator: string, artGridData: string) => {
     console.log(`Starting upload to Turbo for file: ${file.name}, size: ${file.size} bytes, isManifest: ${isManifest}`);
 
     const fileSize = file.size;
@@ -98,7 +89,10 @@ export const uploadToTurbo = async (file: File, isManifest = false, creator: str
                     { name: 'Version', value: '1.0.0' },
                     { name: 'Artist', value: creator },
                     { name: 'Content-Type', value: contentType },
+                    { name: 'Art-Name', value: fileName },
+                    { name: 'Created-At', value: new Date().toISOString() },
                     { name: 'App-Name', value: 'Drawwy' },
+                    { name: "Art-Grid-Data", value: artGridData },
                     ...(isManifest ? [{ name: 'Type', value: 'manifest' }] : [])
                 ]
             }

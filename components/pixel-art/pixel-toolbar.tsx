@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Undo2,
@@ -15,8 +14,8 @@ import { GridSize } from "@/lib/types";
 interface PixelToolbarProps {
   onUndo: () => void;
   onRedo: () => void;
-  onSave: () => void;
-  onExport: () => void;
+  // onSave: () => void;
+  // onExport: () => void;
   onReset: () => void;
   onToggleGridLines: () => void;
   onToggleEraser: () => void;
@@ -26,14 +25,14 @@ interface PixelToolbarProps {
   showGridLines: boolean;
   isErasing: boolean;
   currentSize: GridSize;
-  selectedColor: string;
+  // selectedColor: string;
 }
 
 export default function PixelToolbar({
   onUndo,
   onRedo,
-  onSave,
-  onExport,
+  // onSave,
+  // onExport,
   onReset,
   onToggleGridLines,
   onToggleEraser,
@@ -43,7 +42,7 @@ export default function PixelToolbar({
   showGridLines,
   isErasing,
   currentSize,
-  selectedColor,
+  // selectedColor,
 }: PixelToolbarProps) {
   const gridSizes: { value: GridSize; label: string }[] = [
     { value: 8, label: "8×8" },

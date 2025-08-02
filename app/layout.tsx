@@ -4,6 +4,9 @@ import "./globals.css";
 import Link from "next/link";
 import Script from "next/script";
 import { GoogleTagManager } from "@next/third-parties/google";
+// import { PermawebProvider } from "@/components/layout/PermwebProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { Github, Twitter } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -156,7 +159,8 @@ export default function RootLayout({
           }}
         />
         {children}
-        <footer className="mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
+        <Toaster />
+        <footer className="mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-11 flex items-center justify-between">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <p className="text-xs sm:text-sm text-muted-foreground/70 font-nunito">
@@ -171,6 +175,23 @@ export default function RootLayout({
                 </Link>
               </p>
             </div>
+          </div>
+          <div className="flex items-center gap-5 w-fit">
+            <Link
+              href="https://github.com/aykansal/drawwy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="w-5 h-5 text-muted-foreground hover:text-gray-900 transition-colors duration-200" />
+            </Link>
+
+            <Link
+              href="https://x.com/aykansal"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Twitter className="w-5 h-5 text-muted-foreground hover:text-gray-900 transition-colors duration-200" />
+            </Link>
           </div>
         </footer>
       </body>

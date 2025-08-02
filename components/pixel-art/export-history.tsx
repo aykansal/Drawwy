@@ -13,6 +13,7 @@ import {
   Calendar,
   Copy,
   Check,
+  Edit,
 } from "lucide-react";
 import { getExportHistory } from "@/lib/pixel-art-utils";
 import { ExportHistory } from "@/lib/types";
@@ -20,11 +21,13 @@ import { ExportHistory } from "@/lib/types";
 interface ExportHistoryDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  onLoadForEditing?: (turboLink: string) => void;
 }
 
 export default function ExportHistoryDialog({
   isOpen,
   onClose,
+  onLoadForEditing,
 }: ExportHistoryDialogProps) {
   const [exportHistory, setExportHistory] = useState<ExportHistory[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -133,6 +136,17 @@ export default function ExportHistoryDialog({
                       </div>
 
                       <div className="flex items-center gap-1">
+                        {onLoadForEditing && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onLoadForEditing(item.turboLink)}
+                            className="h-6 w-6 sm:h-8 sm:w-8 p-0"
+                            title="Load for editing"
+                          >
+                            <Edit className="w-2 h-2 sm:w-3 sm:h-3" />
+                          </Button>
+                        )}
                         <Button
                           variant="outline"
                           size="sm"

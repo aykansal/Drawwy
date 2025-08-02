@@ -2,17 +2,16 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "motion/react";
-import { 
-  createEmptyGrid, 
-  addToHistory, 
-  undo, 
-  redo, 
-  canUndo, 
+import {
+  createEmptyGrid,
+  addToHistory,
+  undo,
+  redo,
+  canUndo,
   canRedo,
   savePixelArt,
   uploadToTurboWithHistory,
   generateId,
-  DEFAULT_PALETTE
 } from "@/lib/pixel-art-utils";
 import { GridSize, PixelArt, HistoryState } from "@/lib/types";
 import PixelGrid from "./pixel-grid";
@@ -23,7 +22,8 @@ import ExportDialog from "./export-dialog";
 import ExportHistoryDialog from "./export-history";
 import HandWrittenTitle from "../ardacity/hand-written-title";
 import { Button } from "@/components/ui/button";
-import { Save, Download, History } from "lucide-react";
+import { Save, History, Upload } from "lucide-react";
+import { toast } from "sonner";
 
 export default function PixelArtApp() {
   // State management
@@ -36,12 +36,12 @@ export default function PixelArtApp() {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [showHistoryDialog, setShowHistoryDialog] = useState(false);
-  
+
   // History management
   const [history, setHistory] = useState<HistoryState>({
     past: [],
     present: createEmptyGrid(16),
-    future: []
+    future: [],
   });
 
   // Initialize grid when size changes
@@ -51,23 +51,26 @@ export default function PixelArtApp() {
     setHistory({
       past: [],
       present: newGrid,
-      future: []
+      future: [],
     });
     console.log(`Grid size changed to ${gridSize}x${gridSize}`);
   }, [gridSize]);
 
   // Handle pixel changes
-  const handlePixelChange = useCallback((x: number, y: number, color: string) => {
-    const newGrid = grid.map(row => [...row]);
-    newGrid[y][x] = color;
-    setGrid(newGrid);
-    
-    // Add to history
-    const newHistory = addToHistory(history, newGrid);
-    setHistory(newHistory);
-    
-    console.log(`Pixel changed at (${x}, ${y}) to ${color}`);
-  }, [grid, history]);
+  const handlePixelChange = useCallback(
+    (x: number, y: number, color: string) => {
+      const newGrid = grid.map((row) => [...row]);
+      newGrid[y][x] = color;
+      setGrid(newGrid);
+
+      // Add to history
+      const newHistory = addToHistory(history, newGrid);
+      setHistory(newHistory);
+
+      console.log(`Pixel changed at (${x}, ${y}) to ${color}`);
+    },
+    [grid, history]
+  );
 
   // Undo/Redo handlers
   const handleUndo = useCallback(() => {
@@ -113,24 +116,27 @@ export default function PixelArtApp() {
     setHistory({
       past: [],
       present: newGrid,
-      future: []
+      future: [],
     });
     console.log("Canvas reset");
   }, [gridSize]);
 
   // Save/Load handlers
-  const handleSave = useCallback((name: string) => {
-    const art: PixelArt = {
-      id: generateId(),
-      name,
-      grid,
-      size: gridSize,
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    };
-    savePixelArt(art);
-    console.log(`Artwork saved: ${name}`);
-  }, [grid, gridSize]);
+  const handleSave = useCallback(
+    (name: string) => {
+      const art: PixelArt = {
+        id: generateId(),
+        name,
+        grid,
+        size: gridSize,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      savePixelArt(art);
+      console.log(`Artwork saved: ${name}`);
+    },
+    [grid, gridSize]
+  );
 
   const handleLoad = useCallback((art: PixelArt) => {
     setGrid(art.grid);
@@ -138,23 +144,39 @@ export default function PixelArtApp() {
     setHistory({
       past: [],
       present: art.grid,
-      future: []
+      future: [],
     });
     console.log(`Artwork loaded: ${art.name}`);
   }, []);
 
   // Turbo export handler
-  const handleTurboExport = useCallback(async (creatorName: string, artworkName: string) => {
-    try {
-      const exportHistory = await uploadToTurboWithHistory(grid, creatorName, artworkName);
-      console.log(`Artwork uploaded to Turbo: ${exportHistory.turboLink}`);
-      alert(`Successfully uploaded! Link: ${exportHistory.turboLink}`);
-    } catch (error) {
-      console.error("Turbo export failed:", error);
-      alert("Upload failed. Please try again.");
-      throw error;
-    }
-  }, [grid]);
+  const handleTurboExport = useCallback(
+    async (creatorName: string, artworkName: string) => {
+      try {
+        const exportHistory = await uploadToTurboWithHistory(
+          grid,
+          creatorName,
+          artworkName
+        );
+        console.log(`Artwork uploaded to Turbo: ${exportHistory.turboLink}`);
+        toast.success("Successfully uploaded!", {
+          action: {
+            label: "View",
+            onClick: () => {
+              window.open(exportHistory.turboLink, "_blank");
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Turbo export failed:", error);
+        toast.error("Upload failed", {
+          description: "Please try again !!",
+        });
+        throw error;
+      }
+    },
+    [grid]
+  );
 
   // Custom color handlers
   const handleCustomColorAdd = useCallback(
@@ -185,7 +207,7 @@ export default function PixelArtApp() {
           <History className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden md:inline text-xs sm:text-sm">History</span>
         </Button>
-        
+
         <Button
           variant="outline"
           size="sm"
@@ -195,14 +217,14 @@ export default function PixelArtApp() {
           <Save className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden md:inline text-xs sm:text-sm">Save</span>
         </Button>
-        
+
         <Button
           variant="default"
           size="sm"
           onClick={() => setShowExportDialog(true)}
           className="flex items-center gap-1 sm:gap-2 bg-primary/90 backdrop-blur-sm shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
-          <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+          <Upload className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden md:inline text-xs sm:text-sm">Upload</span>
         </Button>
       </motion.div>
@@ -215,10 +237,7 @@ export default function PixelArtApp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <HandWrittenTitle
-            title="Drawwy"
-            subtitle=""
-          />
+          <HandWrittenTitle title="Drawwy" subtitle="" />
         </motion.div>
 
         {/* Main Content */}
@@ -235,8 +254,8 @@ export default function PixelArtApp() {
               <PixelToolbar
                 onUndo={handleUndo}
                 onRedo={handleRedo}
-                onSave={() => {}} // Empty function since buttons moved to top
-                onExport={() => {}} // Empty function since buttons moved to top
+                // onSave={() => {}} // Empty function since buttons moved to top
+                // onExport={() => {}} // Empty function since buttons moved to top
                 onReset={handleReset}
                 onToggleGridLines={handleToggleGridLines}
                 onToggleEraser={handleToggleEraser}
@@ -246,7 +265,7 @@ export default function PixelArtApp() {
                 showGridLines={showGridLines}
                 isErasing={isErasing}
                 currentSize={gridSize}
-                selectedColor={selectedColor}
+                // selectedColor={selectedColor}
               />
             </div>
             <ColorPalette

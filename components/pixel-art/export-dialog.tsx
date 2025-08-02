@@ -26,7 +26,7 @@ export default function ExportDialog({
   onClose,
   onExport,
   currentGrid,
-  currentSize
+  currentSize,
 }: ExportDialogProps) {
   const [creatorName, setCreatorName] = useState("");
   const [artworkName, setArtworkName] = useState("");
@@ -90,13 +90,12 @@ export default function ExportDialog({
                     <User className="w-3 h-3 sm:w-4 sm:h-4" />
                     Artist Name
                   </label>
-                  {/* @ts-expect-error asdad */}
                   <Input
                     value={creatorName}
-                    onChange={(e: { target: { value: SetStateAction<string>; }; }) => setCreatorName(e.target.value)}
+                    onChange={(e: { target: { value: SetStateAction<string> };}) => setCreatorName(e.target.value)}
                     placeholder="Enter your name..."
                     disabled={isUploading}
-                    onKeyDown={(e: { key: string; }) => e.key === "Enter" && handleExport()}
+                    onKeyDown={(e: { key: string }) => e.key === "Enter" && handleExport()}
                     className="h-8 sm:h-10 text-xs sm:text-sm"
                     />
                 </div>
@@ -106,13 +105,12 @@ export default function ExportDialog({
                     <FileImage className="w-3 h-3 sm:w-4 sm:h-4" />
                     Artwork Name
                   </label>
-                    {/* @ts-expect-error sadasd */}
                   <Input
                     value={artworkName}
-                    onChange={(e: { target: { value: SetStateAction<string>; }; }) => setArtworkName(e.target.value)}
+                    onChange={(e: {target: { value: SetStateAction<string> };}) => setArtworkName(e.target.value)}
                     placeholder="Enter artwork name..."
                     disabled={isUploading}
-                    onKeyDown={(e: { key: string; }) => e.key === "Enter" && handleExport()}
+                    onKeyDown={(e: { key: string }) =>e.key === "Enter" && handleExport()}
                     className="h-8 sm:h-10 text-xs sm:text-sm"
                   />
                 </div>
@@ -124,7 +122,7 @@ export default function ExportDialog({
               </div>
               
               <div className="text-xs text-muted-foreground bg-muted p-2 sm:p-3 rounded-lg">
-                <p>Your artwork will be uploaded to Arweave and stored permanently on the blockchain.</p>
+                <p>Your artwork will be uploaded to Arweave and storedpermanently on the blockchain.</p>
                 <p className="mt-1">You&apos;ll receive a link that you can share with others.</p>
               </div>
               

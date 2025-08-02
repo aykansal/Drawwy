@@ -2,7 +2,6 @@
 
 import { useState, useEffect, SetStateAction } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,8 +31,8 @@ export default function SaveLoadDialog({
   onClose,
   onSave,
   onLoad,
-  currentGrid,
-  currentSize
+  // currentGrid,
+  currentSize,
 }: SaveLoadDialogProps) {
   const [savedArts, setSavedArts] = useState<PixelArt[]>([]);
   const [saveName, setSaveName] = useState("");
@@ -128,12 +127,11 @@ export default function SaveLoadDialog({
                 <div className="space-y-3 sm:space-y-4">
                   <div className="space-y-1 sm:space-y-2">
                     <label className="text-xs sm:text-sm font-medium">Artwork Name</label>
-                    {/* @ts-expect-error ignore */}
                     <Input
                       value={saveName}
-                      onChange={(e: { target: { value: SetStateAction<string>; }; }) => setSaveName(e.target.value)}
+                      onChange={(e: { target: { value: SetStateAction<string>}; }) => setSaveName(e.target.value)}
                       placeholder="Enter a name for your artwork..."
-                      onKeyDown={(e: { key: string; }) => e.key === "Enter" && handleSave()}
+                      onKeyDown={(e: { key: string}) => e.key === "Enter" && handleSave()}
                       className="h-8 sm:h-10 text-xs sm:text-sm"
                     />
                   </div>
@@ -147,9 +145,10 @@ export default function SaveLoadDialog({
                     onClick={handleSave}
                     disabled={!saveName.trim()}
                     className="w-full h-8 sm:h-10 text-xs sm:text-sm"
+                    aria-label="Save artwork to edit later"
                   >
                     <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    Save Artwork
+                    Save Artwork & Edit Later
                   </Button>
                 </div>
               ) : (

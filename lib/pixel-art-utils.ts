@@ -124,6 +124,20 @@ export function getExportHistory(): ExportHistory[] {
   }
 }
 
+// Grid data conversion utilities
+export function gridToString(grid: string[][]): string {
+  return JSON.stringify(grid);
+}
+
+export function stringToGrid(gridString: string): string[][] {
+  try {
+    return JSON.parse(gridString);
+  } catch (error) {
+    console.error('Error parsing grid string:', error);
+    throw new Error('Invalid grid data format');
+  }
+}
+
 // Turbo upload utilities
 export async function uploadToTurboWithHistory(
   grid: string[][], 
@@ -169,8 +183,11 @@ export async function uploadToTurboWithHistory(
     // Create file from blob
     const file = new File([blob], `${artworkName}.png`, { type: 'image/png' });
     
-    // Upload to Turbo
-    const turboId = await uploadToTurbo(file, false, creatorName);
+    // Convert grid to string for storage in tags
+    const gridDataString = gridToString(grid);
+    
+    // Upload to Turbo with grid data
+    const turboId = await uploadToTurbo(file, false, creatorName, gridDataString);
     
     if (!turboId) {
       throw new Error('Failed to upload to Turbo');
@@ -194,6 +211,63 @@ export async function uploadToTurboWithHistory(
     console.error('Error uploading to Turbo:', error);
     throw error;
   }
+}
+
+// Extract Turbo ID from Turbo link
+export function extractTurboId(turboLink: string): string {
+  const match = turboLink.match(/https:\/\/arweave\.net\/([a-zA-Z0-9_-]+)/);
+  if (!match) {
+    throw new Error('Invalid Turbo link format');
+  }
+  return match[1];
+}
+
+// Load grid data from Turbo transaction
+export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string[][], metadata: any }> {
+  try {
+    console.log('Loading grid data from Turbo transaction:', turboId);
+    
+    // Fetch transaction data from Arweave
+    const response = await fetch(`https://arweave.net/${turboId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch transaction: ${response.statusText}`);
+    }
+    
+    // Get the transaction data
+    const transactionData = await response.json();
+    
+    // Extract tags from the transaction
+    const tags = transactionData.tags || [];
+    
+    // Find the Art-Grid-Data tag
+    const gridDataTag = tags.find((tag: any) => tag.name === 'Art-Grid-Data');
+    if (!gridDataTag) {
+      throw new Error('No grid data found in transaction tags');
+    }
+    
+    // Parse the grid data
+    const grid = stringToGrid(gridDataTag.value);
+    
+    // Extract other metadata from tags
+    const metadata = {
+      artist: tags.find((tag: any) => tag.name === 'Artist')?.value,
+      artName: tags.find((tag: any) => tag.name === 'Art-Name')?.value,
+      createdAt: tags.find((tag: any) => tag.name === 'Created-At')?.value,
+      contentType: tags.find((tag: any) => tag.name === 'Content-Type')?.value,
+    };
+    
+    console.log('Successfully loaded grid data from Turbo transaction');
+    return { grid, metadata };
+  } catch (error) {
+    console.error('Error loading grid from Turbo:', error);
+    throw error;
+  }
+}
+
+// Load grid data from Turbo link (convenience function)
+export async function loadGridFromTurboLink(turboLink: string): Promise<{ grid: string[][], metadata: any }> {
+  const turboId = extractTurboId(turboLink);
+  return loadGridFromTurbo(turboId);
 }
 
 // Export utilities

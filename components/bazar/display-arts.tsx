@@ -15,20 +15,12 @@ const DisplayArts = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const getArtistName = (tags: { name: string; value: string }[]) => {
-    const artistTag = tags.find(
-      (tag) => tag.name === "Artist" || tag.name === "artist"
-    );
+    const artistTag = tags.find((tag) => tag.name === "Artist");
     return artistTag ? artistTag.value : "Unknown Artist";
   };
 
   const getArtworkName = (tags: { name: string; value: string }[]) => {
-    const nameTag = tags.find(
-      (tag) =>
-        tag.name === "Name" ||
-        tag.name === "name" ||
-        tag.name === "Title" ||
-        tag.name === "title"
-    );
+    const nameTag = tags.find((tag) => tag.name === "Art-Name");
     return nameTag ? nameTag.value : "Untitled";
   };
 
