@@ -1,8 +1,10 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-// @ts-expect-error ignore
-const Input = ({ className, type, ...props }, ref) => {
+const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, type, ...props }, ref) => {
   return (
     <input
       type={type}
@@ -14,7 +16,7 @@ const Input = ({ className, type, ...props }, ref) => {
       {...props}
     />
   );
-};
+});
 Input.displayName = "Input";
 
 export { Input };

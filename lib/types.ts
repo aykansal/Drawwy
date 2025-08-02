@@ -46,4 +46,150 @@ export interface ExportHistory {
   artworkName: string;
   size: number;
   exportedAt: number;
+}
+
+// Collection types
+export interface Collection {
+  id: string;
+  title: string;
+  description: string;
+  creator: string;
+  dateCreated: string;
+  thumbnail: string;
+  banner: string;
+  assets: string[];
+}
+
+export interface CollectionProcessUpdateId {
+  id: string;
+  status: string;
+  timestamp: number;
+}
+
+export interface UpdateCollectionAssetsParams {
+  collectionId: string;
+  assetIds: string[];
+  creator: string;
+  updateType: "Add" | "Remove";
+}
+
+export interface CollectionProcessId {
+  id: string;
+  status: string;
+  timestamp: number;
+}
+
+export interface CreateCollectionParams {
+  title: string;
+  description: string;
+  creator: string;
+  thumbnail?: string;
+  banner?: string;
+}
+
+// GraphQL Transaction Types for Drawwy
+export interface TransactionTag {
+  name: string;
+  value: string;
+}
+
+export interface TransactionFee {
+  ar: string;
+}
+
+export interface TransactionQuantity {
+  ar: string;
+}
+
+export interface TransactionData {
+  size: number;
+  type: string;
+}
+
+export interface TransactionBlock {
+  id: string;
+  timestamp: number;
+  height: number;
+}
+
+export interface TransactionOwner {
+  address: string;
+}
+
+export interface TransactionNode {
+  id: string;
+  owner: TransactionOwner;
+  recipient: string;
+  fee: TransactionFee;
+  quantity: TransactionQuantity;
+  data: TransactionData;
+  tags: TransactionTag[];
+  block: TransactionBlock;
+}
+
+export interface TransactionEdge {
+  cursor: string;
+  node: TransactionNode;
+}
+
+export interface PageInfo {
+  hasNextPage: boolean;
+}
+
+export interface TransactionsResponse {
+  transactions: {
+    pageInfo: PageInfo;
+    edges: TransactionEdge[];
+  };
+}
+
+export interface GraphQLQuery {
+  query: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  variables?: Record<string, any>;
+}
+
+// Creator Collections Types
+export interface CreatorCollectionNode {
+  id: string;
+  owner: TransactionOwner;
+  tags: TransactionTag[];
+  block: TransactionBlock;
+}
+
+export interface CreatorCollectionEdge {
+  cursor: string;
+  node: CreatorCollectionNode;
+}
+
+export interface CreatorCollectionsResponse {
+  transactions: {
+    pageInfo: PageInfo;
+    edges: CreatorCollectionEdge[];
+  };
+}
+
+export interface CollectionDetails {
+  id: string;
+  title: string;
+  description: string;
+  creator: string;
+  dateCreated: string;
+  thumbnail: string;
+  banner: string;
+  assets: string[];
+}
+
+// Navigation types
+export interface NavItem {
+  id: string;
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+  description?: string;
+}
+
+export interface NavigationConfig {
+  items: NavItem[];
+  homeIcon: React.ReactNode;
 } 
