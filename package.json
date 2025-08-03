@@ -1,5 +1,5 @@
 {
-  "name": "ardacity",
+  "name": "drawwy",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ar.io/sdk": "^3.15.1",
     "@ardrive/turbo-sdk": "^1.25.0",
+    "@ar.io/sdk": "^3.15.1",
     "@next/third-parties": "^15.4.5",
     "@permaweb/aoconnect": "^0.0.85",
     "@permaweb/libs": "^0.0.45",
