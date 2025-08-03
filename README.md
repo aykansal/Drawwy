@@ -2,10 +2,14 @@
 
 Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends! Your artwork is permanently stored on Arweave and can be shared with anyone using a simple link.
 
-![Drawwy App](public/image.png)
+## Demo Video
+<video width="100%" muted controls>
+  <source src="drawwy-demo-video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Live Demo
-Check it out: [drawwy_arlink.ar.io](https://drawwy_arlink.ar.io/?utm_source=github)
+Check it out: [drawwy_arlink.ar.io](https://drawwy_arlink.ar.io)
 
 ## What it does
 - Draw pixel art on different grid sizes (8x8, 16x16, 32x32)
