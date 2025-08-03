@@ -39,56 +39,103 @@ export async function makeGraphQLRequest<T>(
 }
 
 // Specific function for Drawwy transactions
-export async function fetchDrawwyTransactions(first: number = 100): Promise<TransactionsResponse> {
-  const query = `
-    query GetDrawwyTransactions($first: Int!) {
-      transactions(
-        tags: [
-          {
-            name: "App-Name"
-            values: ["Drawwy"]
-          }
-        ]
-        first: $first
-        sort: HEIGHT_DESC
-      ) {
-        pageInfo {
-          hasNextPage
+const query_prod = `
+  query GetDrawwyTransactions($first: Int!) {
+    transactions(
+      tags: [
+        {
+          name: "App-Name"
+          values: ["Drawwy"]
         }
-        edges {
-          cursor
-          node {
+      ]
+      first: $first
+      sort: HEIGHT_DESC
+    ) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        cursor
+        node {
+          id
+          owner {
+            address
+          }
+          recipient
+          fee {
+            ar
+          }
+          quantity {
+            ar
+          }
+          data {
+            size
+            type
+          }
+          tags {
+            name
+            value
+          }
+          block {
             id
-            owner {
-              address
-            }
-            recipient
-            fee {
-              ar
-            }
-            quantity {
-              ar
-            }
-            data {
-              size
-              type
-            }
-            tags {
-              name
-              value
-            }
-            block {
-              id
-              timestamp
-              height
-            }
+            timestamp
+            height
           }
         }
       }
     }
-  `;
+  }
+`;
+const query_dev = `
+  query GetDrawwyTransactions($first: Int!) {
+    transactions(
+      tags: [
+        {
+          name: "App-Name"
+          values: ["Drawwy-Dev"]
+        }
+      ]
+      first: $first
+      sort: HEIGHT_DESC
+    ) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        cursor
+        node {
+          id
+          owner {
+            address
+          }
+          recipient
+          fee {
+            ar
+          }
+          quantity {
+            ar
+          }
+          data {
+            size
+            type
+          }
+          tags {
+            name
+            value
+          }
+          block {
+            id
+            timestamp
+            height
+          }
+        }
+      }
+    }
+  }
+`;
 
-  return makeGraphQLRequest<TransactionsResponse>(query, { first });
+export async function fetchDrawwyTransactions(first: number = 100): Promise<TransactionsResponse> {
+  return makeGraphQLRequest<TransactionsResponse>(process.env.NODE_ENV === "development" ? query_dev : query_prod, { first });
 }
 
 // Function to fetch creator collections by wallet address
