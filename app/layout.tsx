@@ -8,6 +8,8 @@ import { links } from "@/lib/data";
 // import { GoogleTagManager } from "@next/third-parties/google";
 // import { PermawebProvider } from "@/components/layout/PermwebProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { AppVersion } from "@/lib/constants";
+import { GitCommitVertical, SeparatorVertical } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -164,7 +166,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
+      <head>
         <meta name="author" content="aykansal" />
         <meta name="creator" content="aykansal" />
         <meta name="publisher" content="Drawwy" />
@@ -249,8 +251,7 @@ export default function RootLayout({
         <meta name="renderer" content="webkit" />
         <meta name="force-rendering" content="webkit" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-      </head> 
-      */}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playwrite.variable} ${nunito.variable} antialiased`}
       >
@@ -287,7 +288,19 @@ export default function RootLayout({
         {/* <Navigation items={navigationItems} /> */}
         {children}
         <Toaster />
-        <footer className="mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-11 flex items-center justify-between">
+        <footer className="relative mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-11 flex items-center justify-between">
+          <div className="absolute bottom-0 left-0 flex gap-3 text-muted-foreground py-4 sm:py-4 lg:py-6 px-4 sm:px-6 lg:px-11 text-xs sm:text-sm font-nunito">
+            <span className="font-medium">v{AppVersion}</span>
+            {process.env.commitHash && (
+              <Link
+                href={`https://github.com/aykansal/drawwy/commit/${process.env.commitHash}`}
+                target="_blank"
+                className="hover:underline hover:text-foreground transition-colors flex items-center"
+              >
+                <GitCommitVertical height={15} width={15} /> {process.env.commitHash.substring(0, 7)}
+              </Link>
+            )}
+          </div>
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <p className="text-xs sm:text-sm text-muted-foreground/70 font-nunito">

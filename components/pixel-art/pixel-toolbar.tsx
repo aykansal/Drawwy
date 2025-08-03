@@ -48,6 +48,7 @@ export default function PixelToolbar({
     { value: 8, label: "8×8" },
     { value: 16, label: "16×16" },
     { value: 32, label: "32×32" },
+    { value: 48, label: "48×48" },
   ];
 
   return (

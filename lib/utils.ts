@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import axios from "axios";
-import { TransactionsResponse, CreatorCollectionsResponse } from "./types";
+import { TransactionsResponse } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,7 +24,7 @@ export async function makeGraphQLRequest<T>(
       },
     });
 
-    console.log("GraphQL response received:", response.data);
+    console.log("GraphQL response received");
 
     if (response.data.errors) {
       console.error("GraphQL errors:", response.data.errors);
@@ -105,6 +105,10 @@ const query_prod = `
         {
           name: "App-Name"
           values: ["Drawwy"]
+        },
+        {
+          name: "Content-Type"
+          values: "image/png"
         }
       ]
       first: $first
@@ -153,6 +157,10 @@ const query_dev = `
         {
           name: "App-Name"
           values: ["Drawwy-Dev"]
+        },
+        {
+          name: "Content-Type"
+          values: "image/png"
         }
       ]
       first: $first

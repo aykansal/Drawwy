@@ -1,0 +1,1 @@
+export const AppVersion = process.env.version || "unknown";

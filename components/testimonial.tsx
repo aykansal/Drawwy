@@ -7,11 +7,11 @@ import { ClientTweetCard } from "./magicui/client-tweet-card";
 
 const Testimonial = () => {
   const tweetIds = [
-    // "1950945541610754379", // quote without image
+    "1950945541610754379", // quote without image
     "1950968793284616412",
     "1951272815849591093",
     "1950974917597368410",
-    // "1950944930622308582", // quote without image
+    "1950944930622308582", // quote without image
     "1951383719068987495",
     "1950944323589087631",
   ];

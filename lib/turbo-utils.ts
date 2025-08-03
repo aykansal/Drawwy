@@ -2,6 +2,7 @@ import mime from 'mime-types';
 import { ArweaveSigner, TurboFactory } from "@ardrive/turbo-sdk/web";
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { jwk } from './arkit';
+import { AppVersion } from './constants';
 
 // config constants
 export const PROTOCOL_TYPE = "https";
@@ -92,6 +93,7 @@ export const uploadToTurbo = async (file: File, isManifest = false, creator: str
                     { name: 'Art-Name', value: fileName },
                     { name: 'Created-At', value: new Date().toISOString() },
                     { name: 'App-Name', value: process.env.NODE_ENV === "development" ? 'Drawwy-Dev' : 'Drawwy' },
+                    { name: 'App-Version', value: AppVersion },
                     { name: "Art-Grid-Data", value: artGridData },
                     ...(isManifest ? [{ name: 'Type', value: 'manifest' }] : [])
                 ]
@@ -147,6 +149,7 @@ export const uploadManifestToTurbo = async (manifestData: string, creator: strin
                     { name: 'Art-Name', value: artworkName },
                     { name: 'Created-At', value: new Date().toISOString() },
                     { name: 'App-Name', value: process.env.NODE_ENV === "development" ? 'Drawwy-Dev' : 'Drawwy' },
+                    { name: 'App-Version', value:AppVersion },
                     { name: 'Type', value: 'manifest' }
                 ]
             }

@@ -31,7 +31,7 @@ export interface PaletteColor {
   name: string;
 }
 
-export type GridSize = 8 | 16 | 32 | 64;
+export type GridSize = 8 | 16 | 32 | 48;
 
 export interface ExportOptions {
   format: 'png' | 'json';
