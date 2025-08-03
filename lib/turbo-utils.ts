@@ -91,7 +91,7 @@ export const uploadToTurbo = async (file: File, isManifest = false, creator: str
                     { name: 'Content-Type', value: contentType },
                     { name: 'Art-Name', value: fileName },
                     { name: 'Created-At', value: new Date().toISOString() },
-                    { name: 'App-Name', value: 'Drawwy' },
+                    { name: 'App-Name', value: process.env.NODE_ENV === "development" ? 'Drawwy-Dev' : 'Drawwy' },
                     { name: "Art-Grid-Data", value: artGridData },
                     ...(isManifest ? [{ name: 'Type', value: 'manifest' }] : [])
                 ]
@@ -104,6 +104,60 @@ export const uploadToTurbo = async (file: File, isManifest = false, creator: str
         console.error('Upload error:', error);
         if (error instanceof Error && error.message.includes("File size is too large")) {
             console.log("File size is too large");
+            return;
+        }
+        throw error;
+    }
+};
+
+// New function for uploading manifest files
+export const uploadManifestToTurbo = async (manifestData: string, creator: string, artworkName: string) => {
+    console.log(`Starting manifest upload to Turbo for artwork: ${artworkName}`);
+
+    const manifestBlob = new Blob([manifestData], { type: 'application/json' });
+    const manifestFile = new File([manifestBlob], 'manifest.json', { type: 'application/json' });
+    const fileSize = manifestFile.size;
+
+    console.log(`Manifest file details - Size: ${fileSize} bytes`);
+
+    if (fileSize > FREE_UPLOAD_SIZE) {
+        throw new Error('Manifest file size is too large');
+    }
+
+    try {
+        console.log('Converting manifest to buffer...');
+        const buffer = await fileToUint8Array(manifestFile);
+
+        console.log('Starting manifest upload to Turbo...');
+        const uploadResult = await turbo.uploadFile({
+            fileStreamFactory: () => {
+                return new ReadableStream({
+                    start(controller) {
+                        controller.enqueue(buffer);
+                        controller.close();
+                    }
+                });
+            },
+            fileSizeFactory: () => fileSize,
+            dataItemOpts: {
+                tags: [
+                    { name: 'Version', value: '1.0.0' },
+                    { name: 'Artist', value: creator },
+                    { name: 'Content-Type', value: 'application/x.arweave-manifest+json' },
+                    { name: 'Art-Name', value: artworkName },
+                    { name: 'Created-At', value: new Date().toISOString() },
+                    { name: 'App-Name', value: process.env.NODE_ENV === "development" ? 'Drawwy-Dev' : 'Drawwy' },
+                    { name: 'Type', value: 'manifest' }
+                ]
+            }
+        });
+
+        console.log(`Uploaded manifest for ${artworkName} successfully. TX ID: ${uploadResult.id}`);
+        return uploadResult.id;
+    } catch (error) {
+        console.error('Manifest upload error:', error);
+        if (error instanceof Error && error.message.includes("File size is too large")) {
+            console.log("Manifest file size is too large");
             return;
         }
         throw error;

@@ -46,6 +46,40 @@ export interface ExportHistory {
   artworkName: string;
   size: number;
   exportedAt: number;
+  manifestId?: string; // New field for manifest-based uploads
+}
+
+// Manifest-based storage types
+export interface ManifestData {
+  manifest: string;
+  version: string;
+  index: {
+    path: string;
+  };
+  paths: Record<string, { id: string }>;
+}
+
+export interface PixelArtManifest extends ManifestData {
+  manifest: "arweave/paths";
+  version: "0.2.0";
+  index: {
+    path: "image.png";
+  };
+  paths: {
+    "image.png": { id: string };
+    "grid-data.json": { id: string };
+  };
+}
+
+export interface GridDataFile {
+  grid: string[][];
+  metadata: {
+    imageTxId: string;
+    creator: string;
+    artworkName: string;
+    size: number;
+    createdAt: string;
+  };
 }
 
 // Collection types

@@ -1,5 +1,5 @@
-import { GridSize, PixelArt, HistoryState, ExportOptions, ExportHistory } from './types';
-import { uploadToTurbo } from './turbo-utils';
+import { GridSize, PixelArt, HistoryState, ExportOptions, ExportHistory, PixelArtManifest, GridDataFile } from './types';
+import { uploadToTurbo, uploadManifestToTurbo } from './turbo-utils';
 
 // Create an empty grid of specified size
 export function createEmptyGrid(size: GridSize): string[][] {
@@ -140,13 +140,94 @@ export function stringToGrid(gridString: string): string[][] {
   }
 }
 
+// Manifest utility functions
+export function createPixelArtManifest(imageTxId: string, gridDataTxId: string): PixelArtManifest {
+  return {
+    manifest: "arweave/paths",
+    version: "0.2.0",
+    index: {
+      path: "image.png"
+    },
+    paths: {
+      "image.png": { id: imageTxId },
+      "grid-data.json": { id: gridDataTxId }
+    }
+  };
+}
+
+export async function uploadGridDataFile(
+  grid: string[][], 
+  imageTxId: string, 
+  creator: string, 
+  artworkName: string
+): Promise<string> {
+  try {
+    console.log('Creating grid data file...');
+    
+    const gridDataFile: GridDataFile = {
+      grid,
+      metadata: {
+        imageTxId,
+        creator,
+        artworkName,
+        size: grid.length,
+        createdAt: new Date().toISOString()
+      }
+    };
+
+    const gridDataString = JSON.stringify(gridDataFile, null, 2);
+    const gridDataBlob = new Blob([gridDataString], { type: 'application/json' });
+    const gridDataFileObj = new File([gridDataBlob], 'grid-data.json', { type: 'application/json' });
+
+    console.log('Uploading grid data file to Turbo...');
+    const gridDataTxId = await uploadToTurbo(gridDataFileObj, false, creator, '');
+
+    if (!gridDataTxId) {
+      throw new Error('Failed to upload grid data file to Turbo');
+    }
+
+    console.log('Grid data file uploaded successfully:', gridDataTxId);
+    return gridDataTxId;
+  } catch (error) {
+    console.error('Error uploading grid data file:', error);
+    throw error;
+  }
+}
+
+export async function uploadManifestFile(
+  manifest: PixelArtManifest, 
+  creator: string, 
+  artworkName: string
+): Promise<string> {
+  try {
+    console.log('Creating manifest file...');
+    
+    const manifestString = JSON.stringify(manifest, null, 2);
+    
+    console.log('Uploading manifest file to Turbo...');
+    const manifestTxId = await uploadManifestToTurbo(manifestString, creator, artworkName);
+
+    if (!manifestTxId) {
+      throw new Error('Failed to upload manifest file to Turbo');
+    }
+
+    console.log('Manifest file uploaded successfully:', manifestTxId);
+    return manifestTxId;
+  } catch (error) {
+    console.error('Error uploading manifest file:', error);
+    throw error;
+  }
+}
+
 // Turbo upload utilities
-export async function uploadToTurboWithHistory(
+export async function handleImagePublish(
   grid: string[][],
   creatorName: string,
   artworkName: string
 ): Promise<ExportHistory> {
   try {
+    console.log('Starting manifest-based upload process...');
+    
     // Convert grid to PNG blob
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -185,29 +266,44 @@ export async function uploadToTurboWithHistory(
     // Create file from blob
     const file = new File([blob], `${artworkName}.png`, { type: 'image/png' });
 
-    // Convert grid to string for storage in tags
-    const gridDataString = gridToString(grid);
+    // Step 1: Upload image file
+    console.log('Step 1: Uploading image file...');
+    const imageTxId = await uploadToTurbo(file, false, creatorName, '');
 
-    // Upload to Turbo with grid data
-    const turboId = await uploadToTurbo(file, false, creatorName, gridDataString);
-
-    if (!turboId) {
-      throw new Error('Failed to upload to Turbo');
+    if (!imageTxId) {
+      throw new Error('Failed to upload image to Turbo');
     }
 
-    // Create export history entry
+    console.log('Image uploaded successfully:', imageTxId);
+
+    // Step 2: Upload grid data file with image txid in metadata
+    console.log('Step 2: Uploading grid data file...');
+    const gridDataTxId = await uploadGridDataFile(grid, imageTxId, creatorName, artworkName);
+
+    console.log('Grid data uploaded successfully:', gridDataTxId);
+
+    // Step 3: Create and upload manifest
+    console.log('Step 3: Creating and uploading manifest...');
+    const manifest = createPixelArtManifest(imageTxId, gridDataTxId);
+    const manifestTxId = await uploadManifestFile(manifest, creatorName, artworkName);
+
+    console.log('Manifest uploaded successfully:', manifestTxId);
+
+    // Create export history entry with manifest ID
     const exportHistory: ExportHistory = {
       id: generateId(),
       creatorName,
-      turboLink: `https://arweave.net/${turboId}`,
+      turboLink: `https://arweave.net/${manifestTxId}`,
       artworkName,
       size,
-      exportedAt: Date.now()
+      exportedAt: Date.now(),
+      manifestId: manifestTxId
     };
 
     // Save to localStorage
     saveExportHistory(exportHistory);
 
+    console.log('Manifest-based upload completed successfully');
     return exportHistory;
   } catch (error) {
     console.error('Error uploading to Turbo:', error);
@@ -224,11 +320,54 @@ export function extractTurboId(turboLink: string): string {
   return match[1];
 }
 
-// Load grid data from Turbo transaction
+// Load grid data from manifest-based upload
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function loadGridFromManifest(manifestTxId: string): Promise<{ grid: string[][], metadata: any }> {
+  try {
+    console.log('Loading grid data from manifest:', manifestTxId);
+
+    // Step 1: Fetch manifest file
+    const manifestResponse = await fetch(`https://arweave.net/${manifestTxId}`);
+    if (!manifestResponse.ok) {
+      throw new Error(`Failed to fetch manifest: ${manifestResponse.statusText}`);
+    }
+
+    const manifest: PixelArtManifest = await manifestResponse.json();
+    console.log('Manifest loaded:', manifest);
+
+    // Step 2: Fetch grid data file using manifest path
+    const gridDataTxId = manifest.paths['grid-data.json'].id;
+    console.log('Grid data transaction ID:', gridDataTxId);
+
+    const gridDataResponse = await fetch(`https://arweave.net/${gridDataTxId}`);
+    if (!gridDataResponse.ok) {
+      throw new Error(`Failed to fetch grid data: ${gridDataResponse.statusText}`);
+    }
+
+    const gridDataFile: GridDataFile = await gridDataResponse.json();
+    console.log('Grid data file loaded');
+
+    // Step 3: Extract grid and metadata
+    const grid = gridDataFile.grid;
+    const metadata = {
+      ...gridDataFile.metadata,
+      manifestTxId,
+      imageTxId: gridDataFile.metadata.imageTxId
+    };
+
+    console.log('Successfully loaded grid data from manifest');
+    return { grid, metadata };
+  } catch (error) {
+    console.error('Error loading grid from manifest:', error);
+    throw error;
+  }
+}
+
+// Load grid data from Turbo transaction (legacy tag-based format)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string[][], metadata: any }> {
   try {
-    console.log('Loading grid data from Turbo transaction:', turboId);
+    console.log('Loading grid data from Turbo transaction (legacy format):', turboId);
 
     // Fetch transaction data from Arweave
     const response = await fetch(`https://arweave.net/${turboId}`);
@@ -259,10 +398,43 @@ export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string
       contentType: tags.find((tag: Tag) => tag.name === 'Content-Type')?.value,
     };
 
-    console.log('Successfully loaded grid data from Turbo transaction');
+    console.log('Successfully loaded grid data from Turbo transaction (legacy format)');
     return { grid, metadata };
   } catch (error) {
-    console.error('Error loading grid from Turbo:', error);
+    console.error('Error loading grid from Turbo (legacy format):', error);
+    throw error;
+  }
+}
+
+// Universal loading function that detects format and loads accordingly
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function loadGridFromTurboUniversal(turboId: string): Promise<{ grid: string[][], metadata: any }> {
+  try {
+    console.log('Attempting to load grid data with format detection:', turboId);
+
+    // First, try to fetch the transaction to check its content type
+    const response = await fetch(`https://arweave.net/${turboId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch transaction: ${response.statusText}`);
+    }
+
+    // Get the transaction data
+    const transactionData = await response.json();
+    const tags = transactionData.tags || [];
+
+    // Check if this is a manifest by looking for the manifest content type
+    const contentTypeTag = tags.find((tag: Tag) => tag.name === 'Content-Type');
+    const isManifest = contentTypeTag?.value === 'application/x.arweave-manifest+json';
+
+    if (isManifest) {
+      console.log('Detected manifest format, loading via manifest...');
+      return await loadGridFromManifest(turboId);
+    } else {
+      console.log('Detected legacy tag-based format, loading via tags...');
+      return await loadGridFromTurbo(turboId);
+    }
+  } catch (error) {
+    console.error('Error in universal loading function:', error);
     throw error;
   }
 }
@@ -271,7 +443,7 @@ export async function loadGridFromTurbo(turboId: string): Promise<{ grid: string
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadGridFromTurboLink(turboLink: string): Promise<{ grid: string[][], metadata: any }> {
   const turboId = extractTurboId(turboLink);
-  return loadGridFromTurbo(turboId);
+  return loadGridFromTurboUniversal(turboId);
 }
 
 // Export utilities

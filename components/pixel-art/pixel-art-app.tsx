@@ -10,7 +10,7 @@ import {
   canUndo,
   canRedo,
   savePixelArt,
-  uploadToTurboWithHistory,
+  handleImagePublish,
   generateId,
 } from "@/lib/pixel-art-utils";
 import { GridSize, PixelArt, HistoryState } from "@/lib/types";
@@ -153,7 +153,7 @@ export default function PixelArtApp() {
   const handleTurboExport = useCallback(
     async (creatorName: string, artworkName: string) => {
       try {
-        const exportHistory = await uploadToTurboWithHistory(
+        const exportHistory = await handleImagePublish(
           grid,
           creatorName,
           artworkName
@@ -225,7 +225,7 @@ export default function PixelArtApp() {
           className="flex items-center gap-1 sm:gap-2 bg-primary/90 backdrop-blur-sm shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
           <Upload className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="hidden md:inline text-xs sm:text-sm">Upload</span>
+          <span className="hidden md:inline text-xs sm:text-sm">Publish</span>
         </Button>
       </motion.div>
 
