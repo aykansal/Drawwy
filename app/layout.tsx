@@ -3,10 +3,11 @@ import { Geist, Geist_Mono, Playwrite_AU_QLD, Nunito } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Script from "next/script";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { links } from "@/lib/data";
+// import { Navigation } from "@/components/layout/Navigation";
+// import { GoogleTagManager } from "@next/third-parties/google";
 // import { PermawebProvider } from "@/components/layout/PermwebProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { Github, Twitter } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,19 +26,6 @@ const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
 });
-
-const links = [
-  {
-    href: "https://github.com/aykansal/drawwy",
-    icon: Github,
-    label: "GitHub",
-  },
-  {
-    href: "https://x.com/aykansal",
-    icon: Twitter,
-    label: "Twitter",
-  },
-];
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -176,8 +164,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* Raw Meta Tags for Arweave Deployment */}
+      {/* <head>
         <meta name="author" content="aykansal" />
         <meta name="creator" content="aykansal" />
         <meta name="publisher" content="Drawwy" />
@@ -185,7 +172,6 @@ export default function RootLayout({
         <meta name="generator" content="Next.js" />
         <meta name="referrer" content="origin-when-cross-origin" />
 
-        {/* SEO Meta Tags */}
         <meta name="robots" content="index, follow" />
         <meta
           name="googlebot"
@@ -195,23 +181,19 @@ export default function RootLayout({
         <meta name="color-scheme" content="light dark" />
         <meta name="msapplication-TileColor" content="#000000" />
 
-        {/* Mobile App Meta Tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Drawwy" />
         <meta name="mobile-web-app-capable" content="yes" />
 
-        {/* Social Media Meta Tags */}
         <meta property="og:author" content="aykansal" />
         <meta property="og:site_name" content="Drawwy" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="website" />
 
-        {/* Twitter Meta Tags */}
         <meta name="twitter:creator" content="@aykansal" />
         <meta name="twitter:site" content="@aykansal" />
 
-        {/* Verification Meta Tags */}
         <meta
           name="google-site-verification"
           content="your-google-verification-code"
@@ -225,17 +207,14 @@ export default function RootLayout({
           content="your-yahoo-verification-code"
         />
 
-        {/* Additional Meta Tags */}
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta
           name="format-detection"
           content="telephone=no, email=no, address=no"
         />
 
-        {/* Canonical URL */}
         <link rel="canonical" href="https://drawwy_arlink.ar.io" />
 
-        {/* Preconnect for Performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -244,12 +223,10 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://analytics_arlink.ar.io" />
 
-        {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//x.com" />
         <link rel="dns-prefetch" href="//github.com" />
         <link rel="dns-prefetch" href="//arweave.net" />
 
-        {/* Arweave and Blockchain Specific Meta Tags */}
         <meta name="blockchain" content="arweave" />
         <meta name="permanent-storage" content="true" />
         <meta name="decentralized" content="true" />
@@ -257,13 +234,11 @@ export default function RootLayout({
         <meta name="crypto-art" content="true" />
         <meta name="nft-platform" content="true" />
 
-        {/* Security Meta Tags */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="X-Frame-Options" content="DENY" />
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
         <meta httpEquiv="Referrer-Policy" content="origin-when-cross-origin" />
 
-        {/* Viewport and Mobile Optimization */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -271,11 +246,11 @@ export default function RootLayout({
         <meta name="apple-touch-fullscreen" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
-        {/* Performance Meta Tags */}
         <meta name="renderer" content="webkit" />
         <meta name="force-rendering" content="webkit" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-      </head>
+      </head> 
+      */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playwrite.variable} ${nunito.variable} antialiased`}
       >
@@ -309,6 +284,7 @@ export default function RootLayout({
     `,
           }}
         />
+        {/* <Navigation items={navigationItems} /> */}
         {children}
         <Toaster />
         <footer className="mt-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-11 flex items-center justify-between">
@@ -352,16 +328,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-const links = [
-  {
-    href: "https://github.com/aykansal/drawwy",
-    icon: Github,
-    label: "GitHub",
-  },
-  {
-    href: "https://x.com/aykansal",
-    icon: Twitter,
-    label: "Twitter",
-  },
-];
