@@ -1,18 +1,22 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { fetchDrawwyTransactions } from "../../lib/utils";
+import { fetchAllDrawwyTransactions } from "../../lib/utils";
 import { TransactionNode } from "../../lib/types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { Search, User, Image as ImageIcon } from "lucide-react";
+import Pagination from "../ui/pagination";
+
+const ITEMS_PER_PAGE = 50;
 
 const DisplayArts = () => {
-  const [transactions, setTransactions] = useState<TransactionNode[]>([]);
+  const [allTransactions, setAllTransactions] = useState<TransactionNode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getArtistName = (tags: { name: string; value: string }[]) => {
     const artistTag = tags.find((tag) => tag.name === "Artist");
@@ -21,22 +25,30 @@ const DisplayArts = () => {
 
   const getArtworkName = (tags: { name: string; value: string }[]) => {
     const nameTag = tags.find((tag) => tag.name === "Art-Name");
-    return nameTag ? nameTag.value : "Untitled";
+    return nameTag ? nameTag.value : "untitled";
   };
 
   const fetchTransactions = async () => {
     try {
       setLoading(true);
       setError(null);
-      console.log("Fetching Drawwy transactions...");
+      console.log("Fetching all Drawwy transactions...");
 
-      const response = await fetchDrawwyTransactions(100);
-      console.log("Drawwy transactions fetched:", response);
+      const responses = await fetchAllDrawwyTransactions(100);
+      console.log("[display-art-38] Drawwy transactions fetched");
 
-      const transactionNodes = response.transactions.edges.map(
-        (edge) => edge.node
-      );
-      setTransactions(transactionNodes);
+      // Flatten all transactions from all pages
+      const allTransactionNodes: TransactionNode[] = [];
+      responses.forEach(response => {
+        const transactionNodes = response.transactions.edges.map(
+          (edge) => edge.node
+        );
+        allTransactionNodes.push(...transactionNodes);
+      });
+
+      console.log(`Total transactions fetched: ${allTransactionNodes.length}`);
+      setAllTransactions(allTransactionNodes);
+      setCurrentPage(1); // Reset to first page when new data is loaded
     } catch (err) {
       console.error("Error fetching transactions:", err);
       setError(
@@ -49,10 +61,10 @@ const DisplayArts = () => {
 
   const filteredTransactions = useMemo(() => {
     if (!searchQuery.trim()) {
-      return transactions;
+      return allTransactions;
     }
 
-    return transactions.filter((transaction) => {
+    return allTransactions.filter((transaction) => {
       const artistName = getArtistName(transaction.tags);
       const artworkName = getArtworkName(transaction.tags);
 
@@ -62,7 +74,24 @@ const DisplayArts = () => {
         artworkName.toLowerCase().includes(searchLower)
       );
     });
-  }, [transactions, searchQuery]);
+  }, [allTransactions, searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPageTransactions = filteredTransactions.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when searching
+  };
 
   useEffect(() => {
     fetchTransactions();
@@ -111,7 +140,7 @@ const DisplayArts = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search by artist name or artwork title..."
               className="pl-10 pr-4 py-3 border-gray-200 focus:border-gray-400 focus:ring-gray-400"
             />
@@ -123,14 +152,14 @@ const DisplayArts = () => {
         <p className="text-gray-600">
           {filteredTransactions.length === 0 && searchQuery
             ? "No results found"
-            : `${filteredTransactions.length} artwork${
+            : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredTransactions.length)} of ${filteredTransactions.length} artwork${
                 filteredTransactions.length !== 1 ? "s" : ""
-              } found`}
+              }`}
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {filteredTransactions.map((transaction) => {
+        {currentPageTransactions.map((transaction) => {
           const artistName = getArtistName(transaction.tags);
           const artworkName = getArtworkName(transaction.tags);
           const imageUrl = `https://arweave.net/${transaction.id}`;
@@ -198,6 +227,16 @@ const DisplayArts = () => {
         })}
       </div>
 
+      {/* Pagination Component */}
+      {filteredTransactions.length > ITEMS_PER_PAGE && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          isLoading={loading}
+        />
+      )}
+
       {filteredTransactions.length === 0 && !searchQuery && (
         <div className="text-center py-12">
           <div className="space-y-4">
@@ -223,7 +262,7 @@ const DisplayArts = () => {
               Try adjusting your search terms or browse all collections.
             </p>
             <Button
-              onClick={() => setSearchQuery("")}
+              onClick={() => handleSearchChange("")}
               variant="outline"
               size="sm"
             >

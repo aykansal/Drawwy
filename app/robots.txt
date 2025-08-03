@@ -1,0 +1,169 @@
+# Drawwy - Pixel Art Editor Robots.txt
+# https://drawwy_arlink.ar.io/robots.txt
+# 
+# Author: aykansal
+# Twitter: https://x.com/aykansal
+# GitHub: https://github.com/aykansal
+# 
+# Drawwy is a pixel art editor with permanent storage on Arweave
+# Created with ❤️ by aykansal
+
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+
+
+# Allow access to main pages
+Allow: /about/
+Allow: /bazar/
+
+# Allow access to public assets
+Allow: /favicon.ico
+Allow: /favicon-16x16.png
+Allow: /favicon-32x32.png
+Allow: /apple-touch-icon.png
+Allow: /android-chrome-192x192.png
+Allow: /android-chrome-512x512.png
+Allow: /logo.png
+Allow: /image.png
+Allow: /X.png
+
+# Allow access to CSS and JS files for proper rendering
+Allow: /*.css
+Allow: /*.js
+
+# Disallow access to private/admin areas (if any)
+Disallow: /private/
+Disallow: /admin/
+Disallow: /api/private/
+
+# Disallow access to development and build files
+Disallow: /_next/
+Disallow: /__nextjs_original-stack-frame
+Disallow: /_webpack/
+
+# Disallow access to temporary or cache files
+Disallow: /*.tmp
+Disallow: /*.cache
+Disallow: /cache/
+
+# Disallow access to configuration files
+Disallow: /*.config.js
+Disallow: /*.config.ts
+Disallow: /package.json
+Disallow: /pnpm-lock.yaml
+Disallow: /tsconfig.json
+Disallow: /next.config.ts
+Disallow: /postcss.config.mjs
+Disallow: /eslint.config.mjs
+
+# Disallow access to source code and development files
+Disallow: /components/
+Disallow: /lib/
+Disallow: /app/globals.css
+Disallow: /app/layout.tsx
+Disallow: /app/page.tsx
+
+# Disallow access to test files
+Disallow: /*.test.js
+Disallow: /*.test.ts
+Disallow: /*.test.tsx
+Disallow: /*.spec.js
+Disallow: /*.spec.ts
+Disallow: /*.spec.tsx
+
+# Specific rules for major search engines
+
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /api/private/
+Crawl-delay: 1
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /api/private/
+Crawl-delay: 1
+
+# DuckDuckGo Bot
+User-agent: DuckDuckBot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /api/private/
+
+# Social Media Crawlers
+User-agent: Twitterbot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+
+User-agent: facebookexternalhit
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+
+User-agent: LinkedInBot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+
+# AI and Analytics Crawlers
+User-agent: ChatGPT-User
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+
+User-agent: CCBot
+Allow: /
+Allow: /about/
+Allow: /bazar/
+Disallow: /private/
+Disallow: /admin/
+Disallow: /_next/
+
+# Block aggressive crawlers
+User-agent: AhrefsBot
+Disallow: /
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Disallow: /
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://drawwy_arlink.ar.io/sitemap.xml
+
+# Host directive
+Host: https://drawwy_arlink.ar.io
