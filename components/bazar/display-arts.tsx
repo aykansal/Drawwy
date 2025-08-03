@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { Search, User, Image as ImageIcon } from "lucide-react";
-import Pagination from "../ui/pagination";
+import Pagination from "@/components/ui/pagination";
 
 const ITEMS_PER_PAGE = 50;
 
