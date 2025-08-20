@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 
     const effectiveSize = [8, 16, 32].includes(requestedSize) ? requestedSize : 16;
 
-    console.log("[AI] Incoming request", {
+    console.log("\n[AI] Incoming request", {
       messagesCount: messages.length,
       requestedSize,
       effectiveSize,
@@ -102,6 +102,43 @@ Rules:
 - Do not include code fences, explanations, or any prose outside the JSON.
 `;
 
+const systemInstructions_2=`
+You are an expert pixel-art assistant.
+
+Definitions:
+- Size N means an N by N square grid. Example: size 16 means exactly 16 pixel rows and 16 pixel columns.
+- The grid is a flat 2D canvas viewed from above.
+- The origin (0,0) is the top-left pixel of the grid.
+- X-axis increases left → right (columns).
+- Y-axis increases top → bottom (rows).
+
+Spatial rules:
+- "In front of" means to the right of an object (positive X direction).
+- "Behind" means to the left of an object (negative X direction).
+- "Above" means upward on the canvas (toward smaller Y values).
+- "Below" means downward on the canvas (toward larger Y values).
+- Objects must always be placed in the correct relative position according to this 2D coordinate system.
+
+General rules:
+- You may only create or modify grids of size 8x8, 16x16, or 32x32.
+- Colors must be valid hex codes like #ffffff.
+- The grid must be perfectly square: exactly N rows and each row must have exactly N hex strings.
+- The size field must be a number (8, 16, or 32), not a string like "8x8", "16x16", or "32x32".
+- Background must default to #ffffff unless instructed otherwise.
+- Prefer simple, readable color palettes.
+- Never write text, letters, or object names inside the grid — only draw with colors.
+- When modifying current art, always return a full replacement grid of the same size, with the requested changes applied.
+- If the current grid size is not 8, 16, or 32, suggest switching to one of these, but never output other sizes.
+- Output must strictly follow JSON schema: { action, reply, size, grid? }.
+- Do not include code fences, explanations, or any prose outside the JSON.
+
+Your goal:
+- Generate accurate, precise pixel art based on user instructions.
+- Ensure spatial placement matches the 2D grid perspective.
+- Maintain consistency and avoid unintended artifacts.
+
+`
+
     const conversation = messages
       .map((m) => `${m.role.toUpperCase()}:\n${m.content}`)
       .join("\n\n");
@@ -110,7 +147,7 @@ Rules:
       ? `Current canvas (${currentGrid.length}x${currentGrid[0]?.length}):\n${JSON.stringify(currentGrid)}`
       : "No current canvas provided.";
 
-    const prompt = `${systemInstructions}\n\nConversation so far:\n${conversation}\n\n${currentGridText}\n\nTask: Respond to the latest user with a short helpful 'reply'. If appropriate, include a full 8x8 or 16x16 'grid' and set action to 'replace_grid'. Prefer the requested size (${effectiveSize}x${effectiveSize}) when generating.`;
+    const prompt = `${systemInstructions_2}\n\nConversation so far:\n${conversation}\n\n${currentGridText}\n\nTask: Respond to the latest user with a short helpful 'reply'. If appropriate, include a full 8x8 or 16x16 'grid' and set action to 'replace_grid'. Prefer the requested size (${effectiveSize}x${effectiveSize}) when generating.`;
 
     const result = await generateText({
       model,
@@ -125,12 +162,8 @@ Rules:
       }
     });
 
-    console.log("[AI] Result:", result.content[0]);
-
     let object: unknown;
     const text = result.text.trim();
-    console.log("[AI] Raw model text length:", text.length);
-    console.log("[AI] Raw model text preview:\n", truncate(text));
 
     // Remove code fences like ```json ... ``` to allow clean JSON parsing
     let cleaned = text;
@@ -138,7 +171,7 @@ Rules:
       cleaned = cleaned.replace(/^```[a-zA-Z0-9_-]*\s*/i, "");
       cleaned = cleaned.replace(/\s*```\s*$/i, "");
     }
-    console.log("[AI] Cleaned text preview:\n", truncate(cleaned));
+    console.log("\n[AI] Cleaned text preview:\n", truncate(cleaned));
 
     try {
       object = JSON.parse(cleaned);
@@ -174,11 +207,11 @@ Rules:
       ? parsed.data
       : { action: "none" as const, reply: "", size: undefined, grid: undefined };
 
-    console.log("[AI] Parsed valid:", parsed.success);
+    console.log("\n[AI] Parsed valid:", parsed.success);
     if (!parsed.success) {
-      console.log("[AI] Parse error:", parsed.error.flatten());
+      console.log("\n[AI] Parse error:", parsed.error.flatten());
     }
-    console.log("[AI] Parsed summary:", {
+    console.log("\n[AI] Parsed summary:", {
       action: value.action,
       size: value.size ?? null,
       gridSize: value.grid ? `${value.grid.length}x${value.grid[0]?.length}` : "none",
@@ -191,11 +224,11 @@ Rules:
         value.grid = undefined;
         value.action = "none";
         value.reply = `${value.reply}\n\n(Note: The generated grid was discarded because it was not 8x8 or 16x16.)`;
-        console.log("[AI] Discarded grid due to invalid size:", s);
+        console.log("\n[AI] Discarded grid due to invalid size:", s);
       }
     }
 
-    console.log("[AI] Responding with:", {
+    console.log("\n[AI] Responding with:", {
       action: value.action,
       size: value.size ?? null,
       grid: value.grid ? `grid[${value.grid.length}x${value.grid[0]?.length}]` : null,
