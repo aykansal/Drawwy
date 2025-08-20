@@ -22,10 +22,10 @@ import ExportDialog from "./export-dialog";
 import ExportHistoryDialog from "./export-history";
 import HandWrittenTitle from "../ardacity/hand-written-title";
 import { Button } from "@/components/ui/button";
-import { Save, History, Upload } from "lucide-react";
+import { Save, History, Upload, WandSparkles } from "lucide-react";
 import { toast } from "sonner";
 import AiDraw from "./ai-draw";
-import { Bot } from "lucide-react";
+import { RainbowButton } from "../magicui/rainbow-button";
 
 export default function PixelArtApp() {
   // State management
@@ -113,10 +113,24 @@ export default function PixelArtApp() {
     console.log(`Grid lines ${!showGridLines ? "enabled" : "disabled"}`);
   }, [showGridLines]);
 
-  const handleSizeChange = useCallback((newSize: GridSize) => {
-    setGridSize(newSize);
-    console.log(`Grid size changed to ${newSize}x${newSize}`);
-  }, []);
+  const handleSizeChange = useCallback(
+    (newSize: GridSize) => {
+      if (newSize === gridSize) return;
+      const DEFAULT_COLOR = "#ffffff";
+      const hasNonDefaultPixels = grid.some((row) =>
+        row.some((c) => c !== DEFAULT_COLOR)
+      );
+      if (hasNonDefaultPixels) {
+        const confirmed = window.confirm(
+          "Changing the grid size will clear your current drawing. Continue?"
+        );
+        if (!confirmed) return;
+      }
+      setGridSize(newSize);
+      console.log(`Grid size changed to ${newSize}x${newSize}`);
+    },
+    [grid, gridSize]
+  );
 
   const handleReset = useCallback(() => {
     const newGrid = createEmptyGrid(gridSize);
@@ -129,14 +143,17 @@ export default function PixelArtApp() {
     console.log("Canvas reset");
   }, [gridSize]);
 
-  const handleApplyAIResult = useCallback((aiGrid: string[][], aiSize?: 8 | 16 | 32) => {
-    const newSize = (aiSize ?? (aiGrid.length as 8 | 16 | 32));
-    if (newSize !== 8 && newSize !== 16 && newSize !== 32) return;
-    // Apply grid first, then size, to avoid reset effect overriding the AI grid
-    setGrid(aiGrid);
-    setGridSize(newSize);
-    setHistory({ past: [], present: aiGrid, future: [] });
-  }, []);
+  const handleApplyAIResult = useCallback(
+    (aiGrid: string[][], aiSize?: 8 | 16 | 32) => {
+      const newSize = aiSize ?? (aiGrid.length as 8 | 16 | 32);
+      if (newSize !== 8 && newSize !== 16 && newSize !== 32) return;
+      // Apply grid first, then size, to avoid reset effect overriding the AI grid
+      setGrid(aiGrid);
+      setGridSize(newSize);
+      setHistory({ past: [], present: aiGrid, future: [] });
+    },
+    []
+  );
 
   // Save/Load handlers
   const handleSave = useCallback(
@@ -215,15 +232,14 @@ export default function PixelArtApp() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowHistoryDialog(true)}
+        <RainbowButton
+          onClick={() => setShowAI(true)}
           className="flex items-center gap-1 sm:gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg h-8 sm:h-9 px-2 sm:px-3"
+          title="Draw AI"
         >
-          <History className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="hidden md:inline text-xs sm:text-sm">History</span>
-        </Button>
+          <WandSparkles className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden md:inline text-xs sm:text-sm">Draw AI</span>
+        </RainbowButton>
 
         <Button
           variant="outline"
@@ -232,7 +248,7 @@ export default function PixelArtApp() {
           className="flex items-center gap-1 sm:gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg h-8 sm:h-9 px-2 sm:px-3"
         >
           <Save className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="hidden md:inline text-xs sm:text-sm">Save</span>
+          <span className="hidden md:inline text-xs sm:text-sm">Save Draft</span>
         </Button>
 
         <Button
@@ -244,17 +260,19 @@ export default function PixelArtApp() {
           <Upload className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden md:inline text-xs sm:text-sm">Publish</span>
         </Button>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowHistoryDialog(true)}
+          className="flex items-center gap-1 sm:gap-2 bg-background/80 backdrop-blur-sm border-border/50 shadow-lg h-8 sm:h-9 px-2 sm:px-3"
+        >
+          <History className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="hidden md:inline text-xs sm:text-sm">History</span>
+        </Button>
       </motion.div>
 
-      {!showAI && (
-        <Button
-          onClick={() => setShowAI(true)}
-          className="fixed top-4 left-4 z-50 rounded-full h-12 w-12 p-0 shadow-lg"
-          title="Draw AI"
-        >
-          <Bot className="w-5 h-5" />
-        </Button>
-      )}
+      {/* Removed floating AI button; now adjacent to History button */}
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
         {/* Header */}
