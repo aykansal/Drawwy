@@ -24,6 +24,8 @@ import HandWrittenTitle from "../ardacity/hand-written-title";
 import { Button } from "@/components/ui/button";
 import { Save, History, Upload } from "lucide-react";
 import { toast } from "sonner";
+import AiDraw from "./ai-draw";
+import { Bot } from "lucide-react";
 
 export default function PixelArtApp() {
   // State management
@@ -36,6 +38,7 @@ export default function PixelArtApp() {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [showHistoryDialog, setShowHistoryDialog] = useState(false);
+  const [showAI, setShowAI] = useState(false);
 
   // History management
   const [history, setHistory] = useState<HistoryState>({
@@ -44,16 +47,21 @@ export default function PixelArtApp() {
     future: [],
   });
 
-  // Initialize grid when size changes
+  // Initialize grid when size changes (only if current grid doesn't match)
   useEffect(() => {
-    const newGrid = createEmptyGrid(gridSize);
-    setGrid(newGrid);
-    setHistory({
-      past: [],
-      present: newGrid,
-      future: [],
+    setGrid((prev) => {
+      if (prev.length === gridSize && prev[0]?.length === gridSize) {
+        return prev;
+      }
+      const newGrid = createEmptyGrid(gridSize);
+      setHistory({
+        past: [],
+        present: newGrid,
+        future: [],
+      });
+      console.log(`Grid size changed to ${gridSize}x${gridSize}`);
+      return newGrid;
     });
-    console.log(`Grid size changed to ${gridSize}x${gridSize}`);
   }, [gridSize]);
 
   // Handle pixel changes
@@ -120,6 +128,15 @@ export default function PixelArtApp() {
     });
     console.log("Canvas reset");
   }, [gridSize]);
+
+  const handleApplyAIResult = useCallback((aiGrid: string[][], aiSize?: 8 | 16 | 32) => {
+    const newSize = (aiSize ?? (aiGrid.length as 8 | 16 | 32));
+    if (newSize !== 8 && newSize !== 16 && newSize !== 32) return;
+    // Apply grid first, then size, to avoid reset effect overriding the AI grid
+    setGrid(aiGrid);
+    setGridSize(newSize);
+    setHistory({ past: [], present: aiGrid, future: [] });
+  }, []);
 
   // Save/Load handlers
   const handleSave = useCallback(
@@ -229,6 +246,16 @@ export default function PixelArtApp() {
         </Button>
       </motion.div>
 
+      {!showAI && (
+        <Button
+          onClick={() => setShowAI(true)}
+          className="fixed top-4 left-4 z-50 rounded-full h-12 w-12 p-0 shadow-lg"
+          title="Draw AI"
+        >
+          <Bot className="w-5 h-5" />
+        </Button>
+      )}
+
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <motion.div
@@ -319,6 +346,15 @@ export default function PixelArtApp() {
         <ExportHistoryDialog
           isOpen={showHistoryDialog}
           onClose={() => setShowHistoryDialog(false)}
+        />
+
+        {/* AI Drawer */}
+        <AiDraw
+          isOpen={showAI}
+          onOpenChange={setShowAI}
+          grid={grid}
+          size={gridSize}
+          onApplyAIResult={handleApplyAIResult}
         />
       </div>
     </div>
