@@ -1,30 +1,47 @@
-# Drawwy
+# 🎨 Drawwy
 
-Drawwy is a pixel art editor that allows you to create pixel art and share it with your friends! Your artwork is permanently stored on Arweave and can be shared with anyone using a simple link.
+Drawwy is a *browser-based pixel art editor* where you can draw, vibe, and then lock your creations forever on-chain with [Arweave Protocol](https://www.arweave.org).  
 
-## Demo Video
+No logins. No signups. Just pixels + vibes ✨  
+
+## 🚀 Try Drawwy
+- 🕹️ Live app: [drawwy_aykansal.ar.io](https://drawwy_arlink.ar.io)  
+- 🐦 Viral X Post: [X (Twitter)](https://x.com/aykansal/status/1950930691853557855)  
+
+## 🎬 Demo Video · [Watch on YouTube](https://www.youtube.com/watch?v=WrIfs7LzcB4)
+
 <video width="100%" muted controls>
-  <source src="drawwy-demo-video.mp4" type="video/mp4">
+  <source src="drawwy-demo.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
-## Live Demo
-Check it out: [drawwy_arlink.ar.io](https://drawwy_arlink.ar.io)
 
-## What it does
-- Draw pixel art on different grid sizes (8x8, 16x16, 32x32)
-- Choose from lots of colors or add your own
-- Undo and redo your changes
-- Export your creations
-- Permanently store your artwork on Arweave - your creations are saved forever
-- It can be shared with anyone via a simple link!
 
-Perfect for making simple pixel art, icons, or just having fun drawing!
+## 🖌️ Features (aka the secret sauce)
+- 🧩 Grid sizes: 8×8, 16×16, 32×32, 48×48  
+- 🎨 Full color palette (plus add-your-own chaos colors)  
+- ↩️ Undo / redo (because happy accidents are optional)  
+- 💻 Save progress locally in your browser  
+- 🔗 Publish permanently on Arweave (art + grid + manifest)  
+- 🌍 Shareable links that never expire  
+- 👀 Community gallery to snoop what others are cooking up  
 
-## Stats for Nerds
-- Next.js
-- Ardacity UI
-- Ardrive Turbo SDK
 
-## Author
-crafted with ❤️ by [aykansal](https://x.com/aykansal)
+## 🤔 How it Works
+1. 🎨 You draw → pixels live in your browser.  
+2. 📦 Hit publish → Drawwy bundles your art, data, and metadata.  
+3. ⛓️ Uploaded to Arweave → permanent, unkillable link forever.  
+
+Dead servers? Nah. Broken URLs? Couldn’t be us.  
+
+
+## 🛠️ Ingredients
+- ⚛️ **Next.js** – the base dough  
+- 📦 **Arweave** – permanent storage oven  
+- 🪄 **Tryanon.ai** – No-Code tool to build dApp on Arweave  
+- 🚀 **Ardrive Turbo SDK** – fast delivery  
+- 🎛️ **Ardacity UI Lib** – shiny plating  
+
+
+## 🧑‍🍳 Chef
+Cooked up with ☕ by [aykansal](https://x.com/aykansal)

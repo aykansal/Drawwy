@@ -5,26 +5,31 @@ import PixelArtApp from "@/components/pixel-art/pixel-art-app";
 import Testimonial from "@/components/testimonial";
 
 export const metadata: Metadata = {
-  title: "Drawwy - Create Pixel Art with Permanent Storage",
-  description: "Create beautiful pixel art and share it with your friends! Drawwy is a fun pixel art editor with permanent storage on Arweave. Draw on 8x8, 16x16, or 32x32 grids with lots of colors. Built with ❤️ by aykansal.",
+  title: "Drawwy 🎨 Pixel Art Editor with Permanent Storage",
+  description:
+    "Drawwy is a fun, browser-based pixel art editor. Draw on customizable grids (8x8 → 48x48), save locally, and publish forever on Arweave. No logins, no signups, just pixels + vibes.",
   keywords: [
-    "pixel art creator",
-    "online drawing tool",
+    "pixel art editor",
+    "pixel art maker online",
     "arweave art storage",
-    "digital art editor",
-    "pixel art maker",
-    "blockchain art platform",
-    "permanent art storage",
+    "web3 art tool",
+    "NFT pixel art generator",
+    "create pixel sprites",
+    "retro art editor",
+    "permanent blockchain storage",
+    "drawwy",
     "aykansal",
   ],
   authors: [
     { name: "aykansal", url: "https://x.com/aykansal" },
-    { name: "aykansal", url: "https://github.com/aykansal" }
+    { name: "aykansal", url: "https://github.com/aykansal" },
   ],
   creator: "aykansal",
+  themeColor: "#111111",
   openGraph: {
-    title: "Drawwy - Create Pixel Art with Permanent Storage",
-    description: "Create beautiful pixel art and share it with your friends! Permanent storage on Arweave. Built with ❤️ by aykansal.",
+    title: "Drawwy 🎨 Pixel Art Editor",
+    description:
+      "Make pixel art, save locally, and publish forever on Arweave. Shareable, permanent links for your creations.",
     url: "https://drawwy_arlink.ar.io",
     siteName: "Drawwy",
     images: [
@@ -32,7 +37,7 @@ export const metadata: Metadata = {
         url: "https://drawwy_arlink.ar.io/image.png",
         width: 1200,
         height: 630,
-        alt: "Drawwy Pixel Art Editor - Create and Share",
+        alt: "Drawwy Pixel Art Editor - Create & Store Forever",
       },
     ],
     locale: "en_US",
@@ -40,8 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Drawwy - Create Pixel Art with Permanent Storage",
-    description: "Create beautiful pixel art and share it with your friends! Permanent storage on Arweave.",
+    title: "Drawwy 🎨 Pixel Art Editor",
+    description:
+      "No logins, no signups. Just pixels + vibes. Store your art forever on Arweave.",
     images: ["https://drawwy_arlink.ar.io/image.png"],
     creator: "@aykansal",
     site: "@aykansal",
@@ -49,17 +55,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://drawwy_arlink.ar.io",
     languages: {
-      'en': 'https://drawwy_arlink.ar.io',
+      en: "https://drawwy_arlink.ar.io",
     },
   },
   other: {
-    "author": "aykansal",
+    author: "aykansal",
     "twitter:creator": "@aykansal",
     "twitter:site": "@aykansal",
     "og:author": "aykansal",
     "page-type": "homepage",
     "page-category": "art-creator",
-    "page-features": "pixel-art-editor,permanent-storage,arweave,blockchain",
+    "page-features":
+      "pixel-art-editor,permanent-storage,arweave,blockchain,web3,fun,genz",
+    "application-name": "Drawwy",
+    "apple-mobile-web-app-capable": "yes",
+    "mobile-web-app-capable": "yes",
   },
 };
 
@@ -67,37 +77,43 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Drawwy",
-    "description": "Create beautiful pixel art and share it with your friends! Drawwy is a fun pixel art editor with permanent storage on Arweave.",
-    "url": "https://drawwy_arlink.ar.io",
-    "applicationCategory": "ArtApplication",
-    "operatingSystem": "Web Browser",
-    "author": {
+    name: "Drawwy",
+    description:
+      "Create fun pixel art, save in your browser, and publish forever on Arweave. No logins, no signups — just pixels + vibes.",
+    url: "https://drawwy_arlink.ar.io",
+    applicationCategory: "ArtApplication",
+    operatingSystem: "Web Browser",
+    author: {
       "@type": "Person",
-      "name": "aykansal",
-      "url": "https://x.com/aykansal"
+      name: "aykansal",
+      url: "https://x.com/aykansal",
     },
-    "creator": {
+    creator: {
       "@type": "Person",
-      "name": "aykansal",
-      "url": "https://github.com/aykansal"
+      name: "aykansal",
+      url: "https://github.com/aykansal",
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "Drawwy"
+      name: "Drawwy",
+      url: "https://drawwy_arlink.ar.io",
     },
-    "offers": {
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
+      price: "0",
+      priceCurrency: "USD",
     },
-    "featureList": [
+    featureList: [
       "Pixel Art Editor",
       "8x8, 16x16, 32x32, 48x48 Grids",
       "Permanent Storage on Arweave",
-      "Digital Art Creation",
-      "Blockchain Integration"
-    ]
+      "Local Save + Continue Later",
+      "Community Gallery",
+      "Shareable Links",
+    ],
+    screenshot: "https://drawwy_arlink.ar.io/screenshot.png",
+    thumbnailUrl: "https://drawwy_arlink.ar.io/image.png",
+    sameAs: ["https://x.com/aykansal", "https://github.com/aykansal/drawwy"],
   };
 
   return (

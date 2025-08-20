@@ -8,7 +8,6 @@ import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { Search, User, Image as ImageIcon } from "lucide-react";
 import Pagination from "../ui/pagination";
-import Image from "next/image";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -177,7 +176,7 @@ const DisplayArts = () => {
               className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden border-gray-200"
             >
               <div className="aspect-square bg-gray-100 relative overflow-hidden">
-                <Image
+                <img
                   src={imageUrl}
                   alt={artworkName}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
